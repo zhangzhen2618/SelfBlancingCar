@@ -1,3 +1,6 @@
+# ifeq ($(CPU),STC8H8K64U)
+# 	hello="hello sldjl"
+# endif
 MCU := --out-fmt-ihx --code-loc 0x0000 \
 	--xram-size 0x2000 --iram-size 0x200  --model-large \
 		--code-size 65536  --stack-auto\
@@ -24,8 +27,22 @@ vpath %.c $(sort $(dir ${C_SOURCES}))
 # list of ASM objects
 OBJECTS += ${addprefix ${TARGET_DIR}/, $(notdir $(ASM_SOURCES:.s=.rel))}
 vpath %.s $(sort $(dir ${ASM_SOURCES}))
-	
-all: ${TARGET_DIR} ${IHX} ${HEX} ${BINARY}
+
+.PHONY :
+all: show_message ${TARGET_DIR} ${IHX} ${HEX} ${BINARY}
+	@echo "\n\n***********************  Memory cost **************************"
+	@echo "\nMemory: " & tail -n 5 ${TARGET_DIR}/*.mem
+	@echo "\n\n***********************  Memory cost *************************\n\n"
+
+.PHONY : show_message
+
+show_message:
+	@echo "*****************build Target : ${TARGET_NAME} ***********************\n"
+	@date
+	@echo "Target : ${TARGET_NAME}"
+	@echo "CPU: ${CPU}"
+	@echo "sources file : \n $(addprefix "\\t",${C_SOURCES})"
+	@echo "\n*****************build Target : ${TARGET_NAME} ***********************\n"
 
 ${TARGET_DIR}/%.rel: %.c ${HEADER_FILES}
 	@echo Generating object : $@ 
