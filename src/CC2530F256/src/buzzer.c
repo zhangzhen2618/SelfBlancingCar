@@ -1,23 +1,57 @@
 #include "buzzer.h"
 
-#define     T1_DIV          32
+#define     BUZZER_T1_DIV         128 
 
 void buzzer_init(void){
     // timer1 alt2, chanel 2, P1.0
     PERCFG |= PERCFG_T1CFG; // TIMER1 alt2
     P1SEL |= BIT0; // P1.0  peripheral funcation
 
-    // TIMER1 DIV BY 32 and mode modulo
+    // TIMER1 DIV BY 128 and mode modulo
     T1CTL &= ~(T1CTL_DIV | T1CTL_MODE);
-    T1CTL |= T1CTL_DIV_128 | T1CTL_MODE_MODULO; 
+    T1CTL |= T1CTL_DIV_128; 
 
     // chanel toggle compare model, mode : 110
     T1CCTL2 &= ~(T1CCTL2_MODE | T1CCTL2_CMP);
     T1CCTL2 |= T1CCTL2_MODE | T1CCTL2_CMP2 | T1CCTL2_CMP1;
 
-    T1CC0L = 0X00;
-    T1CC0H = 0XFF;
+    // T1CC0L = 0X00;
+    // T1CC0H = 0XFF;
 
-    T1CC2L = 0X00;
-    T1CC2H = 0X80;
+    // T1CC2L = 0X00;
+    // T1CC2H = 0X80;
+}
+
+void buzzer_set_hz(uint16_t hz){
+    buzzer_start();
+    
+    static uint16_t t1cc0 = 0XFFFF;
+    static uint16_t t1cc2 = 0X8000;
+    t1cc0 =  MAIN_FSOC / BUZZER_T1_DIV / hz;
+    t1cc2 =  MAIN_FSOC / BUZZER_T1_DIV / 2 / hz;
+
+    T1CC0L = t1cc0 & 0xFF;
+    T1CC0H = t1cc0 >> 8;
+
+    T1CC2L = t1cc2 & 0XFF;
+    T1CC2H = t1cc2 >> 8;
+
+    // static uint16_t hz = 0;
+    // static uint16_t tone[] = {247,262,294,330,349,392,440,294,523,587,659,698,784,1000};//音频数据表
+    // uint8_t music[]={3,5,8,6,5,13,//音调
+	//                 3,5,6,8,5,13,
+	//                 8,10,9,8,9,8,6,8,5,13,
+	// 				3,5,6,5,6,8,9,5,6,13,
+	// 				3,2,1,2,13,
+	// 				2,2,3,5,5,8,2,3,5,13};
+	// uint8_t time[] ={2,2,2,2,6,4,//时间  
+	// 			2,2,2,2,6,4,
+    //             6,2,4,4,2,2,2,2,6,4,
+	// 			6,2,4,2,2,4,2,2,6,4,
+	// 			2,2,4,6,4,
+	// 			4,2,2,4,4,4,2,2,6,4};
+    // hz %= sizeof(music);
+
+    //     buzzer_set_hz(tone[music[hz]]);
+    //     delay_ms(time[hz++]*150);
 }

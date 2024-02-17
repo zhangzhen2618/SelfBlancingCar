@@ -186,6 +186,19 @@ void LCD_Reset(void)
 ******************************************************************************/	 	 
 void LCD_Init(void)
 {
+	PERCFG |= PERCFG_U1CFG;
+    P1SEL |= BIT5 | BIT6;
+    // SPI0 has Priority, default
+
+    U1GCR |= U1GCR_ORDER; // MSB First
+    // Configure the baudrate as 115200
+    U1BAUD = 0;
+    U1GCR &= ~U0GCR_BAUD_E;
+    U1GCR |= 17;
+
+	// P1INP =	BIT7 | BIT3 | BIT5 | BIT6; 
+    P1DIR |= BIT7 | BIT4 | BIT2 | BIT3;
+	
 	LCD_Reset(); //初始化之前复位
 //************* ST7735S初始化**********//	
 	LCD_WR_REG(0x11);//Sleep exit 

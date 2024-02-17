@@ -5,6 +5,12 @@
 #include "cc2530.h"
 #include "sys_config.h"
 
+
+#define     buzzer_stop()           (T1CTL &= ~(T1CTL_MODE))
+#define     buzzer_start()          (buzzer_stop(), T1CTL |= T1CTL_MODE_MODULO)  
+
 void buzzer_init(void);
+
+void buzzer_set_hz(uint16_t hz);
 
 #endif //f

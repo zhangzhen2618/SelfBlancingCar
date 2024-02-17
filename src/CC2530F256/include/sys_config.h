@@ -3,6 +3,7 @@
 
 #include "cc2530.h"
 #include "cc2530io_bitdef.h"
+#include <stdint.h>
 
 #define     MAIN_FSOC       32000000U
 
