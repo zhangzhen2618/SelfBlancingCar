@@ -41,7 +41,7 @@ show_message:
 	@date
 	@echo "Target : ${TARGET_NAME}"
 	@echo "CPU: ${CPU}"
-	@echo "sources file : \n $(addprefix "\\t",${C_SOURCES})"
+	@echo "sources file : \n $(addprefix "\\n\\t",${C_SOURCES})"
 	@echo "\n*****************build Target : ${TARGET_NAME} ***********************\n"
 
 ${TARGET_DIR}/%.rel: %.c ${HEADER_FILES}

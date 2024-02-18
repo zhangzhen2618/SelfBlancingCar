@@ -1,0 +1,31 @@
+{
+	"folders": [
+		{
+			"name": "BUILD",
+			"path": ".build"
+		},
+		{
+			"name": "WORKSPACE",
+			"path": "."
+		},
+		{
+			"name": "CC2530F256",
+			"path": "src/CC2530F256"
+		},
+		{	"name": "STC8H8K64U",
+			"path": "src/STC8H8K64U/"
+		},
+	],
+	"settings": {
+		"files.associations": {
+			"*.h": "c"
+		},
+		"explorer.sortOrder": "type",
+		"explorer.fileNesting.enabled": true,
+		"explorer.fileNesting.expand": false,
+		"explorer.fileNesting.patterns": {
+			"*.rel": "${capture}.*",
+			"*.hex": "${capture}.*",
+		}
+	}
+}
