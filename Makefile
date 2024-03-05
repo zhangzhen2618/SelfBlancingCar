@@ -1,4 +1,5 @@
 export BUILD_DIR_ROOT ?= .build
+export ECHO ?= echo -e
 # upload the serial port
 export PORT ?= /dev/ttyUSB0
 

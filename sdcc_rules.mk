@@ -30,22 +30,22 @@ vpath %.s $(sort $(dir ${ASM_SOURCES}))
 
 .PHONY :
 all: show_message ${TARGET_DIR} ${IHX} ${HEX} ${BINARY}
-	@echo "\n\n***********************  Memory cost **************************"
-	@echo "\nMemory: " & tail -n 5 ${TARGET_DIR}/*.mem
-	@echo "\n\n***********************  Memory cost *************************\n\n"
+	@${ECHO} "\n\n***********************  Memory cost **************************"
+	@${ECHO} "\nMemory: " & tail -n 5 ${TARGET_DIR}/*.mem
+	@${ECHO} "\n\n***********************  Memory cost *************************\n\n"
 
 .PHONY : show_message
 
 show_message:
-	@echo "*****************build Target : ${TARGET_NAME} ***********************\n"
+	@${ECHO} "*****************build Target : ${TARGET_NAME} ***********************\n"
 	@date
-	@echo "Target : ${TARGET_NAME}"
-	@echo "CPU: ${CPU}"
-	@echo "sources file : \n $(addprefix "\\n\\t",${C_SOURCES})"
-	@echo "\n*****************build Target : ${TARGET_NAME} ***********************\n"
+	@${ECHO} "Target : ${TARGET_NAME}"
+	@${ECHO} "CPU: ${CPU}"
+	@${ECHO} "sources file : \n $(addprefix "\\n\\t",${C_SOURCES})"
+	@${ECHO} "\n*****************build Target : ${TARGET_NAME} ***********************\n"
 
 ${TARGET_DIR}/%.rel: %.c ${HEADER_FILES}
-	@echo Generating object : $@ 
+	@${ECHO} Generating object : $@ 
 	@${CC} -c ${FLAGS} -o $@ $<
 
 ${TARGET_DIR}:

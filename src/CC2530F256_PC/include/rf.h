@@ -18,7 +18,7 @@
 #define     RF_ISRXON()                         (RFST = 0XE3)
 #define     RF_ISTXON()                         (RFST = 0XE9)
 
-// uint8_t RF_init(RF_CONFIG* pRfConfig);
+uint8_t RF_init(void);
 // void RF_set_channel(uint8_t channel);
 
 #endif // !

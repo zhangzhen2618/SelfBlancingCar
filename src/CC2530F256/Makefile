@@ -6,9 +6,9 @@ CC2530F256:
 		CPU=CC2530F256
 
 clean_CC2530F256: 
-	@echo "clean target CC2530F256"
+	@${ECHO} "clean target CC2530F256"
 	@rm -rf ${BUILD_DIR_ROOT}/CC2530F256
 
 upload_CC2530F256: CC2530F256
-	@echo "Uploading target : ${BUILD_DIR_ROOT}/CC2530F256/CC2530F256.hex"
+	@${ECHO} "Uploading target : ${BUILD_DIR_ROOT}/CC2530F256/CC2530F256.hex"
 	@sudo cc-tool -f -e -v -w ${BUILD_DIR_ROOT}/CC2530F256/CC2530F256.hex

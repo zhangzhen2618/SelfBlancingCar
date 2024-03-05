@@ -13,9 +13,9 @@ STC8H8K64U:
 		CPU=STC8H8K64U
 
 clean_STC8H8K64U:
-	@echo "clean target STC8H8K64U"
+	@${ECHO} "clean target STC8H8K64U"
 	@rm -rf ${BUILD_DIR_ROOT}/STC8H8K64U
 
 upload_STC8H8K64U: STC8H8K64U
-	@echo "Uploading target : ${BUILD_DIR_ROOT}/STC8H8K64U/STC8H8K64U.hex"
+	@${ECHO} "Uploading target : ${BUILD_DIR_ROOT}/STC8H8K64U/STC8H8K64U.hex"
 	@stcgal -P stc8d -t 48000 -p ${PORT}  ${BUILD_DIR_ROOT}/STC8H8K64U/STC8H8K64U.hex
