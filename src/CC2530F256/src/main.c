@@ -1,7 +1,6 @@
 #include "cc2530_lcd.h"
 #include "buzzer.h"
-
-#define IRQ_TXDONE                 0x02
+#include "rf.h"
 
 int main(){
     
@@ -10,41 +9,35 @@ int main(){
 
 	LCD_Init();
 
-    /* RF settings SoC: CC2530 */
-    // P1        = 0xEC; // port 1 
-    // P0DIR     = 0x80; // port 0 direction 
-    // P1DIR     = 0x13; // port 1 direction 
-    FRMCTRL1  = 0x00; // frame handling 
-    CCACTRL0  = 0xF8; // cca threshold 
-    FSCAL1    = 0x00; // tune frequency calibration 
-    AGCCTRL1  = 0x15; // agc reference level 
-    AGCCTRL2  = 0xFE; // agc gain override 
-    TXFILTCFG = 0x09; // tx filter configuration 
-    CHVER     = 0x00; // chip version 
-    CHIPID    = 0x00; // chip id 
+    RF_init();
 
-    FRMCTRL0 |= BIT6 | BIT5; // auto crc and ack
-
-    char str[] = "Hello world!!!";
+    char str[] = "000: Hello world!!!\n";
     uint8_t data_size = sizeof(str) + 2 + 2;
 
-    RFD = data_size;
-    RFD = 0x41;
-    RFD = 0x88;
-    // RFD = 0x00;
-    // RFD = 0X00;
-
-    for(uint8_t i = 0; i < sizeof(str); i++){
-        RFD = str[i];
-    }
-    
+    static uint8_t count = 0;
 
 	while(1){	
         
-        RFST = 0XE9;
-        while(!(RFIRQF1 & IRQ_TXDONE) );
+        RF_SFLUSHTX();
 
-        RFIRQF1 = ~IRQ_TXDONE;
+        RF_ISTXON();
+
+        str[2] = '0' + count % 10;
+        str[1] = '0' + count / 10 % 10;
+        str[0] = '0' + count / 100;
+        count++;
+        RFD = data_size;
+        RFD = 0x41;
+        RFD = 0x88;
+        // RFD = 0x00;
+        // RFD = 0X00;
+
+        for(uint8_t i = 0; i < sizeof(str); i++){
+            RFD = str[i];
+        }
+        while(!(RFIRQF1 & RFIRQF1_TXDONE) );
+
+        RFIRQF1 = ~RFIRQF1_TXDONE;
         // delay_ms(100);
         LCD_Clear(RED);
         // delay_ms(1000);
