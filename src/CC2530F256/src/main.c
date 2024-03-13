@@ -1,6 +1,8 @@
 #include "cc2530_lcd.h"
 #include "buzzer.h"
 #include "rf.h"
+#include <stdio.h>
+#include <string.h>
 
 int main(){
     
@@ -11,10 +13,21 @@ int main(){
 
     RF_init();
 
-    char str[] = "000: Hello world!!!\n";
-    uint8_t data_size = sizeof(str) + 2 + 2;
-
-    static uint8_t count = 0;
+    static char str[] = "Hello world!!!\n";
+    // Packet overhead ((frame control field, sequence number, PAN ID,
+    // destination and source) + (footer))
+    // Note that the length byte itself is not included included in the packet length
+    static uint8_t tx_buff[MPDU_MAX_PKG_LEN] = {0};
+    
+    MPDU_HEADER *mpdu_header = (MPDU_HEADER *)(tx_buff);
+    mpdu_header->len = MPDU_HEADER_LEN + sizeof(str) + MPDU_FCS_LEN;
+    mpdu_header->seq_num = 0;
+    mpdu_header->fcf = FC_16BIT_DATA_ACK_REQ;
+    mpdu_header->dest_pan = 0x2222;
+    mpdu_header->dest_addr = 0x2323;
+    mpdu_header->src_pan = 0x5555;
+    mpdu_header->src_addr = 0x6666;
+    memcpy(tx_buff + MPDU_HEADER_LEN + 1, str, sizeof(str));
 
 	while(1){	
         
@@ -22,18 +35,10 @@ int main(){
 
         RF_ISTXON();
 
-        str[2] = '0' + count % 10;
-        str[1] = '0' + count / 10 % 10;
-        str[0] = '0' + count / 100;
-        count++;
-        RFD = data_size;
-        RFD = 0x41;
-        RFD = 0x88;
-        // RFD = 0x00;
-        // RFD = 0X00;
+        mpdu_header->seq_num++;
 
-        for(uint8_t i = 0; i < sizeof(str); i++){
-            RFD = str[i];
+        for(uint8_t i = 0; i < mpdu_header->len; i++){
+            RFD = tx_buff[i];
         }
         while(!(RFIRQF1 & RFIRQF1_TXDONE) );
 

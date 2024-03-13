@@ -11,60 +11,45 @@ int main(){
     
     uart1Init();
 
-    static char str[] = "Hello world!!!\n";
-    static uint8_t tx_buf[128];
+    static char str[64] = {0};
+    static uint8_t tx_buf[MPDU_MAX_PKG_LEN];
+    
+    MPDU_HEADER *mpdu_header = (MPDU_HEADER *)(tx_buf);
 
     RXENABLE |= BIT7;
 
 	while(1){	
 
-        // RF_SRXON();
-
-        // RF_SFLUSHRX();
+        RF_SFLUSHRX();
         RF_ISRXON();
 
         while(!(RFIRQF0 & RFIRQF0_RXPKTDONE));
 
         RFIRQF0 &= ~(RFIRQF0_RXPKTDONE);
 
-        // RF_ISRXON();
-
-        // tx_buf[0] = 0xff;
-
         uint8_t data_len = 0;
         data_len = RXFIFOCNT;
 
-        tx_buf[0] = RFD;
-
-        
-        for(uint8_t i = 1; i < tx_buf[0] && i < 128; i++){
+        for(uint8_t i = 0; i < data_len && i < 128; i++){
             tx_buf[i] = RFD;
         }
-        
-        uint8_t str_len = sprintf(str, "%d:%d:%d:%X:%X\n", data_len, tx_buf[0], tx_buf[1], CHVER, CHIPID);
-        // uart1Send(tx_buf + 3, tx_buf[0] -4);
-        // str[2] = '0' + data_len % 10;
-        // str[1] = '0' + data_len / 10 % 10;
-        // str[0] = '0' + data_len / 100;
-        // str[3] = ':';
-        // str[6] = '0' + tx_buf[0] % 10;
-        // str[5] = '0' + tx_buf[0] / 10 % 10;
-        // str[4] = '0' + tx_buf[0] / 100;
-        // str[7] = ':';
-        // str[10] = '0' + tx_buf[1] % 10;
-        // str[9] = '0' + tx_buf[1] / 10 % 10;
-        // str[8] = '0' + tx_buf[1] / 100;
-        // str[11] = '\n';
-        
+
+        uint8_t str_len = sprintf(str, "mpdu pkg len : %d\n", mpdu_header->len);
         uart1Send(str, str_len);
-        uart1Send(tx_buf + 3, data_len - 5);
-        // RF_ISRXON();
-        // if(tx_buf[0] != 0x19)
-        //     continue;
-
-        // uart1Send(tx_buf, tx_buf[0] + 1);
-
-
-        // for(uint16_t i = 0; i < 0xffff; i++);        
+        str_len = sprintf(str, "fcf : %X\n", mpdu_header->fcf);
+        uart1Send(str, str_len);
+        str_len = sprintf(str, "mpdu pkg seq : %d\n", mpdu_header->seq_num);
+        uart1Send(str, str_len);
+        str_len = sprintf(str, "dest pan : %X\n", mpdu_header->dest_pan);
+        uart1Send(str, str_len);
+        str_len = sprintf(str, "dest addr : %X\n", mpdu_header->dest_addr);
+        uart1Send(str, str_len);
+        str_len = sprintf(str, "src pan : %X\n", mpdu_header->src_pan);
+        uart1Send(str, str_len);
+        str_len = sprintf(str, "src addr : %X\n", mpdu_header->src_addr);
+        uart1Send(str, str_len);
+        str_len = sprintf(str, "data : ");
+        uart1Send(str, str_len);
+        uart1Send((uint8_t *)(mpdu_header) + sizeof(MPDU_HEADER), mpdu_header->len - MPDU_HEADER_LEN - 1 - MPDU_FCS_LEN);
     }   
 }

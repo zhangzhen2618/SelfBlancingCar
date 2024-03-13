@@ -51,11 +51,28 @@
 #define     FC2_SRC_ADDR_MODE_64BIT             (3 << 6)
 
 // Data type, frame pending, short addr noack, fc
-#define     FC_16BIT_DATA_NOACK_REQ              ((FC1_FRAME_TYPE_DATA | FC1_FRAME_PENDING) | \
-                                                 (FC2_DEST_ADDR_MODE_16BIT_SHORT | \
-                                                 FC2_SOURCE_ADDR_MODE_16BIT_SHORT) << 8)
+#define     FC_16BIT_DATA_NOACK_REQ              ((FC1_FRAME_TYPE_DATA | FC1_FRAME_PENDING | FC1_PAN_ID_COMPRESSION) | \
+                                                 (FC2_DEST_ADDR_MODE_16BIT | FC2_SRC_ADDR_MODE_16BIT) << 8)
 // Data type, frame pending, short addr ack, fc
 #define     FC_16BIT_DATA_ACK_REQ                FC_16BIT_DATA_NOACK_REQ | FC1_ACK_REQ
+
+// MPDU header length mpdu_len: 1, FCF: 2, SEQ: 1, DEST_PAN: 2, DEST_ADDR: 2, SRC_PAN: 2, SRC_ADDR: 2
+#define     MPDU_HEADER_LEN                      (2 + 1 + 2 + 2 + 2 + 2)
+// 16bits crc FCS
+#define     MPDU_FCS_LEN                         2
+
+#define     MPDU_MAX_PKG_LEN                     128
+
+typedef struct{
+    uint8_t len;
+    uint16_t fcf;
+    uint8_t seq_num;
+    uint16_t dest_pan;
+    uint16_t dest_addr;
+    uint16_t src_pan;
+    uint16_t src_addr;
+    // uint8_t *data_ptr;
+}MPDU_HEADER;
 
 bool RF_init(void);
 
