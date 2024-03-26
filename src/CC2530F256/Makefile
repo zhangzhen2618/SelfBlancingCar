@@ -3,11 +3,13 @@ CC2530F256_SRC=buzzer.c \
 				cc2530_LCD.c \
 				rf.c \
 				sys_config.c \
+				dma.c \
 				main.c
 
 CC2530F256_PC_SRC=rf.c \
 				sys_config.c \
 				uart.c \
+				dma.c \
 				main_pc.c
 
 CC2530F256: 

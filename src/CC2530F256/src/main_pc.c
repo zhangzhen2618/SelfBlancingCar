@@ -9,7 +9,7 @@ int main(){
 
     RF_init();
     
-    uart1Init();
+    uart1_init(BAUD_921600);
 
     static char str[64] = {0};
     static uint8_t tx_buf[MPDU_MAX_PKG_LEN];
@@ -35,21 +35,21 @@ int main(){
         }
 
         uint8_t str_len = sprintf(str, "mpdu pkg len : %d\n", mpdu_header->len);
-        uart1Send(str, str_len);
+        uart1_transmit(str, str_len);
         str_len = sprintf(str, "fcf : %X\n", mpdu_header->fcf);
-        uart1Send(str, str_len);
+        uart1_transmit(str, str_len);
         str_len = sprintf(str, "mpdu pkg seq : %d\n", mpdu_header->seq_num);
-        uart1Send(str, str_len);
+        uart1_transmit(str, str_len);
         str_len = sprintf(str, "dest pan : %X\n", mpdu_header->dest_pan);
-        uart1Send(str, str_len);
+        uart1_transmit(str, str_len);
         str_len = sprintf(str, "dest addr : %X\n", mpdu_header->dest_addr);
-        uart1Send(str, str_len);
+        uart1_transmit(str, str_len);
         str_len = sprintf(str, "src pan : %X\n", mpdu_header->src_pan);
-        uart1Send(str, str_len);
+        uart1_transmit(str, str_len);
         str_len = sprintf(str, "src addr : %X\n", mpdu_header->src_addr);
-        uart1Send(str, str_len);
+        uart1_transmit(str, str_len);
         str_len = sprintf(str, "data : ");
-        uart1Send(str, str_len);
-        uart1Send((uint8_t *)(mpdu_header) + sizeof(MPDU_HEADER), mpdu_header->len - MPDU_HEADER_LEN - 1 - MPDU_FCS_LEN);
+        uart1_transmit(str, str_len);
+        uart1_transmit((uint8_t *)(mpdu_header) + sizeof(MPDU_HEADER), mpdu_header->len - MPDU_HEADER_LEN - 1 - MPDU_FCS_LEN);
     }   
 }

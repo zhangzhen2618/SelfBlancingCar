@@ -245,45 +245,6 @@
 
 // P1IEN (0x8D) - Port 1 Interrupt Mask
 
-
-
-/*******************************************************************************
- * DMA Controller
- */
-
-// DMAARM (0xD6) - DMA Channel Arm
-#define DMAARM_ABORT                      0x80
-#define DMAARM4                           0x10
-#define DMAARM3                           0x08
-#define DMAARM2                           0x04
-#define DMAARM1                           0x02
-#define DMAARM0                           0x01
-
-
-// DMAREQ (0xD7) - DMA Channel Start Request and Status
-#define DMAREQ4                           0x10
-#define DMAREQ3                           0x08
-#define DMAREQ2                           0x04
-#define DMAREQ1                           0x02
-#define DMAREQ0                           0x01
-
-
-// DMA0CFGH (0xD5) - DMA Channel 0 Configuration Address High Byte
-
-// DMA0CFGL (0xD4) - DMA Channel 0 Configuration Address Low Byte
-
-// DMA1CFGH (0xD3) - DMA Channel 1 - 4 Configuration Address High By
-
-// DMA1CFGL (0xD2) - DMA Channel 1 - 4 Configuration Address Low Byte
-
-// DMAIRQ (0xD1) - DMA Interrupt Flag
-#define DMAIRQ_DMAIF4                     0x10
-#define DMAIRQ_DMAIF3                     0x08
-#define DMAIRQ_DMAIF2                     0x04
-#define DMAIRQ_DMAIF1                     0x02
-#define DMAIRQ_DMAIF0                     0x01
-
-
 // T1CNTH (0xE3) - Timer 1 Counter High
 
 // T1CNTL (0xE2) - Timer 1 Counter Low

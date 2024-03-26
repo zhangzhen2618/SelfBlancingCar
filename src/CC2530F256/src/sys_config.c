@@ -2,7 +2,8 @@
 
 void sys_init(void){
     
-    CLKCONCMD &= ~CLKCON_OSC; //设置系统时钟源为32MHz
+	// set the system clock as 32MHz
+    CLKCONCMD &= ~CLKCON_OSC; 
 	while( CLKCONSTA & CLKCON_OSC);
-	CLKCONCMD &= ~CLKCONSTA_CLKSPD; //当前系统时钟频率为32MHz
+	CLKCONCMD &= ~CLKCONSTA_CLKSPD; 
 }
