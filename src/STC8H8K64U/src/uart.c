@@ -1,5 +1,4 @@
 #include "uart.h"
-#include <stdio.h>
 
 void uart_init(void){
     SCON = 0x50; // 模式1，接收使能

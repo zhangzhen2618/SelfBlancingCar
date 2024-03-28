@@ -6,6 +6,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+// define the some x_reg
+SFRX(X_U1DBUF, 0X70F9);
+
 #define     BIT0                                0x01
 #define     BIT1                                0x02
 #define     BIT2                                0x04
