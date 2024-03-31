@@ -9,6 +9,8 @@ int main(){
 
     RF_init();
 
+    dma_init();
+
     PANIDL = 0x22;
     PANIDH = 0x22;
 
@@ -21,12 +23,14 @@ int main(){
     UART1_RX_INI_EN();
     INT_EN();
 
-    static char str[64] = {0};
+    static uint8_t str[64] = "hAHello world!!\n";
     static uint8_t tx_buf[MPDU_MAX_PKG_LEN];
     
     MPDU_HEADER *mpdu_header = (MPDU_HEADER *)(tx_buf);
 
     RXENABLE |= BIT7;
+
+    static DMA_DESC __xdata DMA_CH_CONFIG[5];
 
 	while(1){	
 
@@ -44,8 +48,9 @@ int main(){
             tx_buf[i] = RFD;
         }
 
-        uart1_dma_transmit(0xA7, tx_buf, 0x1fff);
+        static uint8_t tx[64] = "AHello world!\n0123456789";
+        tx[0] = 13;
+        uart1_dma_transmit('A', tx, 64);
     }   
 }
-
 

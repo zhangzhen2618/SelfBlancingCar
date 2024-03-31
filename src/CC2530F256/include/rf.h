@@ -8,6 +8,10 @@
 #include "sys_config.h"
 #include <stdbool.h>
 
+// RF disable the filter
+#define     RF_DISABLE_FILTER()                 (FRMFILT0 &= ~BIT0)
+#define     RF_ENABLE_FILTER()                  (FRMFILT0 |= BIT0)
+
 // RF COMMAND
 #define     RF_SRXON()                          (RFST = 0XD3)
 #define     RF_SFLUSHRX()                       (RFST = 0XDD)
@@ -78,7 +82,7 @@
 // 16bits crc FCS
 #define     MPDU_FCS_LEN                         2
 
-#define     MPDU_MAX_PKG_LEN                     128
+#define     MPDU_MAX_PKG_LEN                     130
 
 /* build the 802.15.4 header 
 * Frame Control: 2 bytes
@@ -97,33 +101,16 @@ typedef struct{
     // uint8_t *data_ptr;
 }MPDU_HEADER;
 
+// init rf parameter
 void RF_init(void);
 
-// set the frame control field
-void rf_set_fcf(uint16_t fcf);
+// write the data to the rf tx buff
+void RF_write_data_to_buf(MPDU_HEADER *mpdu_header_ptr, uint8_t *tx_data, uint8_t data_len);
 
-// set the tx the pand id and pan address
-void rf_set_src_panid_and_addr(uint16_t panid, uint16_t src_addr);
+// RF core error interrupter funcation
+void rf_error_isr(void) __interrupt(RFERR_VECTOR) __using(RFERR_VECTOR);
 
-// set the tx the dest pand id and dest address
-void rf_set_dest_panid_and_addr(uint16_t pandid, uint16_t dest_addr);
+// RF general interrupt funcation
+void rf_isr(void) __interrupt(RF_VECTOR) __using(RF_VECTOR);
 
-// set the tx sequence number
-void rf_set_tx_seq_num(uint16_t seq_num);
-
-// set the tx sequence number plus + 1
-void rf_tx_seq_num_plus_1(void);
-
-// rf DMA init
-void rf_DMA_init(void);
-
-// rf DMA transmit
-void rf_DMA_transmit(uint8_t *data, uint16_t len);
-
-// rf receive flag
-bool rf_pkg_finshed(void);
-
-// rf read package from buffer (just inclde the mpdu payload field)
-// return the mpdu pkg uint8_t point
-uint8_t * rf_read_package(void);
 #endif // !
