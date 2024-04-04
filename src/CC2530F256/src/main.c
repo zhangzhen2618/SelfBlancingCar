@@ -19,12 +19,16 @@ int main(){
     
     static MPDU_HEADER mpdu_header;
     // mpdu_header.len = MPDU_HEADER_LEN + sizeof(str) + MPDU_FCS_LEN;
+
+    RF_SET_PANID(RF_TE_DEFAULT_PANDID);
+    RF_SET_SHORTADDR(RF_TE_DEFAULT_SHORTADDR);
+
     mpdu_header.seq_num = 0;
     mpdu_header.fcf = FC_16BIT_DATA_ACK_REQ;
-    mpdu_header.dest_pan = 0x2222;
-    mpdu_header.dest_addr = 0x2323;
-    mpdu_header.src_pan = 0x5555;
-    mpdu_header.src_addr = 0x6666;
+    mpdu_header.dest_pan = RF_PC_DEFAULT_PANDID;
+    mpdu_header.dest_addr = RF_PC_DEFAULT_SHORTADDR;
+    mpdu_header.src_pan = RF_TE_DEFAULT_PANDID;
+    mpdu_header.src_addr = RF_TE_DEFAULT_SHORTADDR;
 
 	while(1){	
         
@@ -32,7 +36,7 @@ int main(){
 
         mpdu_header.seq_num++;
 
-        RF_write_data_to_buf(&mpdu_header, str, sizeof(str));
+        RF_transmit(&mpdu_header, str, sizeof(str));
         
         while(!(RFIRQF1 & RFIRQF1_TXDONE) );
 

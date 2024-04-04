@@ -20,8 +20,8 @@
 #define     RF_ISTXON()                         (RFST = 0XE9)
 
 // RF set the pand_id
-#define     RF_SET_PANID(addr)                  (PANIDL = addr, PANIDH = addr >> 8)
-#define     RF_SET_SHORTADDR(addr)              (SHORTADDRL = addr, SHORTADDRH = addr >> 8)
+#define     RF_SET_PANID(addr)                  (PANIDH = addr, PANIDL = addr >> 8)
+#define     RF_SET_SHORTADDR(addr)              (SHORTADDRH = addr, SHORTADDRL = addr >> 8)
 
 #define     RF_BROADCAST_PANID                  0XFFFF
 #define     RF_BROADCAST_SHORTADDR              0XFFFF
@@ -98,14 +98,13 @@ typedef struct{
     uint16_t dest_addr;
     uint16_t src_pan;
     uint16_t src_addr;
-    // uint8_t *data_ptr;
 }MPDU_HEADER;
 
 // init rf parameter
 void RF_init(void);
 
 // write the data to the rf tx buff
-void RF_write_data_to_buf(MPDU_HEADER *mpdu_header_ptr, uint8_t *tx_data, uint8_t data_len);
+void RF_transmit(MPDU_HEADER *mpdu_header_ptr, uint8_t *tx_data, uint8_t data_len);
 
 // RF core error interrupter funcation
 void rf_error_isr(void) __interrupt(RFERR_VECTOR) __using(RFERR_VECTOR);

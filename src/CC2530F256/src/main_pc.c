@@ -11,11 +11,10 @@ int main(){
 
     dma_init();
 
-    PANIDL = 0x22;
-    PANIDH = 0x22;
+    // FRMFILT0 &= ~BIT0;
 
-    SHORTADDRL = 0x23;
-    SHORTADDRH = 0x23;
+    RF_SET_PANID(RF_PC_DEFAULT_PANDID);
+    RF_SET_SHORTADDR(RF_PC_DEFAULT_SHORTADDR);
 
     uart1_init(BAUD_MAX_2000000);
     uart1_dma_config();
@@ -23,7 +22,6 @@ int main(){
     UART1_RX_INI_EN();
     INT_EN();
 
-    static uint8_t str[64] = "hAHello world!!\n";
     static uint8_t tx_buf[MPDU_MAX_PKG_LEN];
     
     MPDU_HEADER *mpdu_header = (MPDU_HEADER *)(tx_buf);
@@ -48,9 +46,7 @@ int main(){
             tx_buf[i] = RFD;
         }
 
-        static uint8_t tx[64] = "AHello world!\n0123456789";
-        tx[0] = 13;
-        uart1_dma_transmit('A', tx, 64);
+        uart1_dma_transmit(0xA7, tx_buf, MPDU_MAX_PKG_LEN);
     }   
 }
 

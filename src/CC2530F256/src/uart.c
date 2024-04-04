@@ -89,7 +89,9 @@ void uart1_dma_transmit(uint8_t start_byte, uint8_t *txdata, uint16_t len){
 // uart1 rx isr funcation
 void uart1_rx_isr(void) __interrupt(URX1_VECTOR) __using(URX1_VECTOR){
     static uint8_t tx[10] = {0};
-    tx[0] = U1DBUF;
-    tx[1] = uart1_tx_dma_ch_num;
-    uart1_transmit(tx, 2);
+    tx[0] = PANIDL;
+    tx[1] = PANIDH;
+    tx[2] = SHORTADDRL;
+    tx[3] = SHORTADDRH;
+    uart1_transmit(tx, 4);
 }
