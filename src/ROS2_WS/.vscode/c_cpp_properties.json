@@ -4,38 +4,14 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/share/sdcc/include/**"
+                "/opt/ros/${ROS_DISTRO}/include/**"
             ],
-            "defines": [
-                    // "__SDCC",
-                    "__C51__",
-                    "__VSCODE_C51__",
-                    "reentrant=",
-                    "compact=",
-                    "small=",
-                    "large=",
-                    "data=",
-                    "idata=",
-                    "__pdata=",
-                    "__bdata=",
-                    "__xdata=",
-                    "__code=",
-                    "bit=char",
-                    "sbit=char",
-                    "sfr=char",
-                    "sfr16=int",
-                    "sfr32=int",
-                    "__interrupt(X)=",
-                    "__using(X)=",
-                    "_at_=",
-                    "_priority_=",
-                    "_task_="
-                ],
-            "intelliSenseMode": "gcc-arm",
+           
+            "intelliSenseMode": "gcc-x64",
             // "compilerPath": "/usr/bin/sdcc",
             "cStandard": "c23",
-            "cppStandard": "c++23"
-            // "configurationProvider": "ms-vscode.makefile-tools"
+            "cppStandard": "c++23",
+            // "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4

@@ -25,7 +25,8 @@
 	],
 	"settings": {
 		"files.associations": {
-			"*.h": "c"
+			"*.h": "c",
+			"array": "cpp"
 		},
 		"explorer.sortOrder": "type",
 		"explorer.fileNesting.enabled": true,
