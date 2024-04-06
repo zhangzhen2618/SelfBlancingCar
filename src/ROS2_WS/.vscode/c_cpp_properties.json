@@ -10,7 +10,7 @@
             "intelliSenseMode": "gcc-x64",
             // "compilerPath": "/usr/bin/sdcc",
             "cStandard": "c23",
-            "cppStandard": "c++23",
+            "cppStandard": "c++23"
             // "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],

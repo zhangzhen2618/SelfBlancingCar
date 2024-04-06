@@ -22,11 +22,9 @@
 
 #include "self_blance_car/thread_utils.hpp"
 
-#define		PKG_MAX_LEN			130
+#define	PKG_MAX_LEN			              130
 
 namespace SelfBlanceCar{
-
-using ReceivedCb = std::function<void (const std::array<uint8_t, PKG_MAX_LEN>)>;
 
 /**
  * @brief Common exception for communication error
@@ -42,8 +40,8 @@ public:
 
     }
 
-    template<typename T>
-    static std::string make_message(const char * module, T msg){
+		template<typename T>
+		static std::string make_message(const char * module, T msg){
 		std::ostringstream ss;
 		ss << "DeviceError:" << module << ":" << msg_to_string(msg);
 		return ss.str();

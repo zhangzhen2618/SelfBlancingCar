@@ -61,21 +61,23 @@ public:
 	inline bool is_open(){
 		return serial_dev.is_open();
 	}
-	void connect(const ReceivedCb & cb_handle_message);
+	void connect(void);
 
 private:
 	asio::io_service io_service;
 	std::thread io_thread;
 	asio::serial_port serial_dev;
 	//! Message receive callback
-	ReceivedCb message_received_cb;
+	// ReceivedCb message_received_cb;
 
 	std::atomic<bool> tx_in_progress;
 	std::recursive_mutex mutex;
 	std::array<uint8_t, PKG_MAX_LEN> rx_buf;
+	std::vector<uint8_t> tx_q;
 
 	void do_read();
 	void do_write(bool check_tx_state);
+	void parse_buff(uint8_t * buf, const size_t bufsize, size_t bytes_received);
 };
 
 };  // namespace mavconn

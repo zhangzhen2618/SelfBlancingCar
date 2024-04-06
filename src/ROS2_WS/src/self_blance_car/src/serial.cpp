@@ -25,7 +25,7 @@ SBCarSerial::SBCarSerial(
 	tx_in_progress(false){
 
   	using SPB = asio::serial_port_base;
-
+	
   	CONSOLE_BRIDGE_logInform("device: %s @ %d bps", device.c_str(), baudrate);
 
 	try {
@@ -56,24 +56,21 @@ SBCarSerial::SBCarSerial(
 	} catch (asio::system_error & err) {
 		throw DeviceError("serial", err);
 	}
-
-	if(serial_dev.is_open()){
-		std::cout << "Open device : " << device << std::endl;
-	}
 }
 
 SBCarSerial::~SBCarSerial(){
-  close();
+  	close();
 }
 
-void SBCarSerial::connect(const ReceivedCb & cb_handle_message){
+void SBCarSerial::connect(void){
 
-	message_received_cb = cb_handle_message;
+	// message_received_cb = cb_handle_message;
 
 	// give some work to io_service before start
 	io_service.post(std::bind(&SBCarSerial::do_read, this));
 
-	std::cout << "create the thread" << std::endl;
+	CONSOLE_BRIDGE_logInform("serial read thread created!!!");
+
 	// run io_service for async io
 	io_thread = std::thread(
 		[this]() {
@@ -100,10 +97,6 @@ void SBCarSerial::close(){
 	}
 
 	io_service.reset();
-
-	//   if (port_closed_cb) {
-	//     port_closed_cb();
-	//   }
 }
 
 void SBCarSerial::send_bytes(const uint8_t * bytes, size_t length){
@@ -115,13 +108,12 @@ void SBCarSerial::send_bytes(const uint8_t * bytes, size_t length){
 	{
 		lock_guard lock(mutex);
 
-		// if (tx_q.size() >= MAX_TXQ_SIZE) {
-		// 	throw std::length_error("MAVConnSerial::send_bytes: TX queue overflow");
-		// }
-
-		// tx_q.emplace_back(bytes, length);
+		while(length--){
+			tx_q.emplace_back(*bytes);
+			bytes++;
+		}
 	}
-	// io_service.post(std::bind(&MAVConnSerial::do_write, shared_from_this(), true));
+	io_service.post(std::bind(&SBCarSerial::do_write, shared_from_this(), true));
 }
 
 
@@ -136,53 +128,63 @@ void SBCarSerial::do_read(void){
 			sthis->close();
 			return;
 		}
-		sthis->message_received_cb(sthis->rx_buf);
+		sthis->parse_buff(sthis->rx_buf.data(), sthis->rx_buf.size(), bytes_transferred);
 		sthis->do_read();
     });
 }
 
+void SBCarSerial::parse_buff(uint8_t * buf, const size_t bufsize, size_t bytes_received){
+	std::cout << std::hex;
+	for(int i = 0; i < bytes_received; i++){
+		std::cout << (int)buf[i] << " ";
+	}
+	std::cout << std::dec << std::endl;
+}
+
 void SBCarSerial::do_write(bool check_tx_state){
-	// if (check_tx_state && tx_in_progress) {
-	// 	return;
-	// }
 
-	// lock_guard lock(mutex);
-	// if (tx_q.empty()) {
-	// 	return;
-	// }
+	if (check_tx_state && tx_in_progress) {
+		return;
+	}
 
-	// tx_in_progress = true;
-	// auto sthis = shared_from_this();
+	lock_guard lock(mutex);
+
+	if (tx_q.empty()) {
+		return;
+	}
+
+	tx_in_progress = true;
+	auto sthis = shared_from_this();
 	// auto & buf_ref = tx_q.front();
-	// serial_dev.async_write_some(
-	// 	buffer(buf_ref.dpos(), buf_ref.nbytes()),
-	// 	[sthis, &buf_ref](error_code error, size_t bytes_transferred) {
-	// 	assert(ssize_t(bytes_transferred) <= buf_ref.len);
+	serial_dev.async_write_some(
 
-	// 	if (error) {
-	// 		CONSOLE_BRIDGE_logError(PFXd "write: %s", sthis->conn_id, error.message().c_str());
-	// 		sthis->close();
-	// 		return;
-	// 	}
+		buffer(tx_q.data(), tx_q.size()),
 
-	// 	sthis->iostat_tx_add(bytes_transferred);
-	// 	lock_guard lock(sthis->mutex);
+		[sthis](error_code error, size_t bytes_transferred) {
 
-	// 	if (sthis->tx_q.empty()) {
-	// 		sthis->tx_in_progress = false;
-	// 		return;
-	// 	}
+		assert(ssize_t(bytes_transferred) <= sthis->tx_q.size());
 
-	// 	buf_ref.pos += bytes_transferred;
-	// 	if (buf_ref.nbytes() == 0) {
-	// 		sthis->tx_q.pop_front();
-	// 	}
+		if (error) {
+			CONSOLE_BRIDGE_logError("write: %s", error.message().c_str());
+			sthis->close();
+			return;
+		}
 
-	// 	if (!sthis->tx_q.empty()) {
-	// 		sthis->do_write(false);
-	// 	} else {
-	// 		sthis->tx_in_progress = false;
-	// 	}
-	// 	});
+		// sthis->iostat_tx_add(bytes_transferred);
+		lock_guard lock(sthis->mutex);
+
+		sthis->tx_q.erase(sthis->tx_q.begin(), sthis->tx_q.begin() + bytes_transferred);
+		
+		if (sthis->tx_q.empty()) {
+			sthis->tx_in_progress = false;
+			return;
+		}
+
+		if (!sthis->tx_q.empty()) {
+			sthis->do_write(false);
+		} else {
+			sthis->tx_in_progress = false;
+		}
+		});
 }
 

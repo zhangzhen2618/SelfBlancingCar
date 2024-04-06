@@ -27,7 +27,7 @@ add_executable(serial_node
               src/serial.cpp
               src/serial_node.cpp)
 
-ament_target_dependencies(serial_node console_bridge)
+ament_target_dependencies(serial_node console_bridge rclcpp)
 
 install(TARGETS
 	serial_node
