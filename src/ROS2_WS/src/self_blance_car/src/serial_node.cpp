@@ -18,8 +18,8 @@ int main(int argc, const char** argv) {
     rclcpp::Node::SharedPtr node_ptr = rclcpp::Node::make_shared("serial_node");
 
     auto timer = node_ptr->create_wall_timer(1s, [my_serial](void){
-        const uint8_t char_h = 'A';
-        my_serial->send_bytes(&char_h, 1);
+        // const uint8_t char_h = 'A';
+        // my_serial->send_bytes(&char_h, 1);
     });
 
     rclcpp::spin(node_ptr);    

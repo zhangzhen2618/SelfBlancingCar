@@ -36,16 +36,15 @@ namespace utils{
  *
  */
 template<typename ... Args>
-std::string format(const std::string & fmt, Args... args)
-{
-  // C++11 specify that string store elements continously
-  std::string ret;
+std::string format(const std::string & fmt, Args... args){
+    // C++11 specify that string store elements continously
+    std::string ret;
 
-  auto sz = std::snprintf(nullptr, 0, fmt.c_str(), args ...);
-  ret.reserve(sz + 1);
-  ret.resize(sz);       // to be sure there have room for \0
-  std::snprintf(&ret.front(), ret.capacity() + 1, fmt.c_str(), args ...);
-  return ret;
+    auto sz = std::snprintf(nullptr, 0, fmt.c_str(), args ...);
+    ret.reserve(sz + 1);
+    ret.resize(sz);       // to be sure there have room for \0
+    std::snprintf(&ret.front(), ret.capacity() + 1, fmt.c_str(), args ...);
+    return ret;
 }
 
 /**
@@ -57,12 +56,11 @@ std::string format(const std::string & fmt, Args... args)
  * @todo add for other posix system
  */
 template<typename ... Args>
-bool set_this_thread_name(const std::string & name, Args && ... args)
-{
-  auto new_name = format(name, std::forward<Args>(args)...);
+bool set_this_thread_name(const std::string & name, Args && ... args){
+    auto new_name = format(name, std::forward<Args>(args)...);
 
 #ifdef __APPLE__
-  return pthread_setname_np(new_name.c_str()) == 0;
+    return pthread_setname_np(new_name.c_str()) == 0;
 #else
   pthread_t pth = pthread_self();
   return pthread_setname_np(pth, new_name.c_str()) == 0;
@@ -75,14 +73,14 @@ bool set_this_thread_name(const std::string & name, Args && ... args)
 template<typename T>
 inline const std::string to_string_ss(T & obj)
 {
-  std::ostringstream ss;
-  ss << obj;
-  return ss.str();
+    std::ostringstream ss;
+    ss << obj;
+    return ss.str();
 }
 
-constexpr size_t operator"" _KiB(unsigned long long sz)      // NOLINT
+constexpr size_t operator"" _KiB(unsigned long long sz)// NOLINT
 {
-  return sz * 1024;
+    return sz * 1024;
 }
 
 }  // namespace utils

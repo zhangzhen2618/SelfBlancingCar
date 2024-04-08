@@ -8,6 +8,23 @@
 #include "sys_config.h"
 #include <stdbool.h>
 
+// RF Interrupt masks
+#define     RF_IRQM0_ACT_UNUSED_SET()            (RFIRQM0 |= BIT0)
+#define     RF_IRQM0_ACT_UNUSED_CLEAR()          (RFIRQM0 &= ~BIT0)
+
+#define     RF_IRQM0_RXPKTDONE_SET()             (RFIRQM0 |= BIT6)
+#define     RF_IRQM0_RXPKTDONE_CLEAR()           (RFIRQM0 &= ~BIT6)
+
+#define     RF_IRQM1_TXDONE_SET()                (RFIRQM1 |= BIT1)
+#define     RF_IRQM1_TXDONE_CLEAR()              (RFIRQM1 &= ~BIT1)
+
+// RF Interrupt flag
+#define     RF_IRQF0_RXPKTDONE_GET()             (RFIRQF0 & BIT6)
+#define     RF_IRQF0_RXPKTDONE_CLEAR()           (RFIRQF0 &= ~BIT6)
+
+#define     RF_IRQF1_TXDONE_GET()                (RFIRQF1 & BIT1)
+#define     RF_IRQF1_TXDONE_CLEAR()              (RFIRQF1 &= ~BIT1)
+
 // RF disable the filter
 #define     RF_DISABLE_FILTER()                 (FRMFILT0 &= ~BIT0)
 #define     RF_ENABLE_FILTER()                  (FRMFILT0 |= BIT0)
@@ -42,9 +59,6 @@
 #define     MAX_CHANNEL                         26    // 2480 MHz
 #define     CHANNEL_SPACING                     5     // MHz
 
-// RF Interrupt flag
-#define     RFIRQF1_TXDONE                      BIT2
-#define     RFIRQF0_RXPKTDONE                   BIT6
 
 
 // 802.15.4 FCS(Frame Control), description
@@ -100,8 +114,13 @@ typedef struct{
     uint16_t src_addr;
 }MPDU_HEADER;
 
+typedef void (*RF_RECEIVE_CB)(uint8_t *, uint8_t len);
+
 // init rf parameter
 void RF_init(void);
+
+// set the rf pkg done isr callback funcation
+void RF_set_pkg_done_isr_fun(RF_RECEIVE_CB rx_cb);
 
 // write the data to the rf tx buff
 void RF_transmit(MPDU_HEADER *mpdu_header_ptr, uint8_t *tx_data, uint8_t data_len);

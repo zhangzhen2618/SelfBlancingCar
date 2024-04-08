@@ -41,6 +41,7 @@ SFRX(X_U1DBUF, 0X70F9);
 // RF Interrupt (INT 16)
 #define     RF_INT_DISEN()                      (IEN2 &= ~IEN2_RFIE)
 #define     RF_INT_EN()                         (IEN2 |= IEN2_RFIE)
+#define     RF_INT_FLAG_CLEAR()                 (S1CON = 0X00)
 
 // init the system clock and other peripherals
 void sys_init(void);
