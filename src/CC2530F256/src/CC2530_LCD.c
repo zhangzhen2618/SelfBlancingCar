@@ -1,56 +1,25 @@
-#include "cc2530_lcd.h"
+#include "CC2530_LCD.h"
 
 //LCD的画笔颜色和背景色	   
-uint16_t POINT_COLOR=0x0000;	//画笔颜色
-uint16_t BACK_COLOR=0xFFFF;  //背景色 
+static uint16_t POINT_COLOR=0x0000;	//画笔颜色
+static uint16_t BACK_COLOR=0xFFFF;  //背景色 
 //管理LCD重要参数
 //默认为竖屏
-_lcd_dev lcddev;
+static _lcd_dev lcddev;
 
-void delay_ms(int count)  // /* X1ms */
-{
+// write the byte funcation point
+void (*spi_write_byte)(uint8_t);
+
+void delay_ms(int count){
 	int i,j;
 	for(i=0;i<count;i++)
 			for(j=0;j<1000;j++);
 }
-
-void delay_us(int count)  // /* X1us */
-{
+// /* X1us */
+void delay_us(int count){
 	int i,j;
 	for(i=0;i<count;i++)
 			for(j=0;j<1;j++);
-}
-/*****************************************************************************
- * @name       :void spi_write_byte(uint8_t d)
- * @date       :2018-08-09 
- * @function   :Write a byte of data using C51's Software SPI
- * @parameters :d:Data to be written
- * @retvalue   :None
-******************************************************************************/
-void spi_write_byte(uint8_t d)
-{
-	U1CSR &= ~U0CSR_TX_BYTE;
-    U1DBUF = d;
-    while (!(U1CSR & U0CSR_TX_BYTE));
-	// uint8_t val=0x80;
-	// while(val)
-	// {
-	// 	if(d&val)
-	// 	{
-	// 		LCD_SDI = 1;
-	// 		// delay_us(1);
-	// 	}
-	// 	else
-	// 	{
-	// 		LCD_SDI = 0;
-	// 		// delay_us(1);
-	// 	}
-	// 	LCD_CLK = 0;
-	// 	// delay_us(1);
-	// 	LCD_CLK = 1;
-	// 	// delay_us(1);
-	// 	val>>=1;
-	// }
 }
 
 /*****************************************************************************
@@ -60,8 +29,7 @@ void spi_write_byte(uint8_t d)
  * @parameters :data:Command value to be written
  * @retvalue   :None
 ******************************************************************************/
-void LCD_WR_REG(uint8_t Reg)	 
-{	
+void LCD_WR_REG(uint8_t Reg){	
 	LCD_RS=0;
 	LCD_CS=0;
 	spi_write_byte(Reg);
@@ -75,8 +43,7 @@ void LCD_WR_REG(uint8_t Reg)
  * @parameters :data:data value to be written
  * @retvalue   :None
 ******************************************************************************/
- void LCD_WR_DATA(uint8_t Data)
-{
+ void LCD_WR_DATA(uint8_t Data){
 	LCD_RS=1;
 	LCD_CS=0;
 	spi_write_byte(Data);
@@ -90,8 +57,7 @@ void LCD_WR_REG(uint8_t Reg)
  * @parameters :Data:Data to be written
  * @retvalue   :None
 ******************************************************************************/	 
-void LCD_WR_DATA_16Bit(uint16_t Data)
-{
+void LCD_WR_DATA_16Bit(uint16_t Data){
 	LCD_CS=0;
 	LCD_RS=1;
 	spi_write_byte(Data>>8);
@@ -107,9 +73,8 @@ void LCD_WR_DATA_16Bit(uint16_t Data)
                 LCD_RegValue:Data to be written
  * @retvalue   :None
 ******************************************************************************/
-void LCD_WriteReg(uint8_t LCD_Reg, uint8_t LCD_RegValue)
-{
-  LCD_WR_REG(LCD_Reg);
+void LCD_WriteReg(uint8_t LCD_Reg, uint8_t LCD_RegValue){
+  	LCD_WR_REG(LCD_Reg);
 	LCD_WR_DATA(LCD_RegValue);
 }
 
@@ -120,8 +85,7 @@ void LCD_WriteReg(uint8_t LCD_Reg, uint8_t LCD_RegValue)
  * @parameters :None
  * @retvalue   :None
 ******************************************************************************/	
-void LCD_WriteRAM_Prepare(void)
-{
+void LCD_WriteRAM_Prepare(void){
  	LCD_WR_REG(lcddev.wramcmd);	  
 }
 
@@ -132,18 +96,14 @@ void LCD_WriteRAM_Prepare(void)
  * @parameters :color:Filled color
  * @retvalue   :None
 ******************************************************************************/	
-void LCD_Clear(uint16_t Color)
-{
+void LCD_Clear(uint16_t Color){
 	uint16_t i,j;
 	LCD_SetWindows(0,0,lcddev.width-1,lcddev.height-1);	
-    for(i=0;i<lcddev.width;i++)
-	 {
-	  for (j=0;j<lcddev.height;j++)
-	   	{
-        	 LCD_WR_DATA_16Bit(Color);
-	    }
-
-	  }
+    for(i=0;i<lcddev.width;i++){
+		for (j=0;j<lcddev.height;j++){
+			LCD_WR_DATA_16Bit(Color);
+		}
+	}
 }
 
 /*****************************************************************************
@@ -154,8 +114,7 @@ void LCD_Clear(uint16_t Color)
                 y:the y coordinate of the pixel
  * @retvalue   :None
 ******************************************************************************/	
-void LCD_DrawPoint(uint16_t x,uint16_t y)
-{
+void LCD_DrawPoint(uint16_t x,uint16_t y){
 	LCD_SetWindows(x,y,x,y);//设置光标位置 
 	LCD_WR_DATA_16Bit(POINT_COLOR); 	    
 } 	 
@@ -167,8 +126,7 @@ void LCD_DrawPoint(uint16_t x,uint16_t y)
  * @parameters :None
  * @retvalue   :None
 ******************************************************************************/	
-void LCD_Reset(void)
-{
+void LCD_Reset(void){
 	LCD_RESET=1;
 	delay_ms(50);	
 	LCD_RESET=0;
@@ -184,17 +142,9 @@ void LCD_Reset(void)
  * @parameters :None
  * @retvalue   :None
 ******************************************************************************/	 	 
-void LCD_Init(void)
-{
-	PERCFG |= PERCFG_U1CFG;
-    P1SEL |= BIT5 | BIT6;
-    // SPI0 has Priority, default
-
-    U1GCR |= U1GCR_ORDER; // MSB First
-    // Configure the baudrate as 115200
-    U1BAUD = 0;
-    U1GCR &= ~U0GCR_BAUD_E;
-    U1GCR |= 17;
+void LCD_Init(void (*write_byte)(uint8_t)){
+	// set the spi write the byte to spi driver
+	spi_write_byte = write_byte;
 
 	// P1INP =	BIT7 | BIT3 | BIT5 | BIT6; 
     P1DIR |= BIT7 | BIT4 | BIT2 | BIT3;
@@ -309,8 +259,8 @@ void LCD_Init(void)
 								yEnd:the endning y coordinate of the LCD display window
  * @retvalue   :None
 ******************************************************************************/ 
-void LCD_SetWindows(uint16_t xStar, uint16_t yStar,uint16_t xEnd,uint16_t yEnd)
-{	
+void LCD_SetWindows(uint16_t xStar, uint16_t yStar,uint16_t xEnd,uint16_t yEnd){
+
 	LCD_WR_REG(lcddev.setxcmd);	
 	LCD_WR_DATA(0x00);
 	LCD_WR_DATA(xStar+lcddev.xoffset);		
@@ -334,8 +284,7 @@ void LCD_SetWindows(uint16_t xStar, uint16_t yStar,uint16_t xEnd,uint16_t yEnd)
 								Ypos:the  y coordinate of the pixel
  * @retvalue   :None
 ******************************************************************************/ 
-void LCD_SetCursor(uint16_t Xpos, uint16_t Ypos)
-{	  	    			
+void LCD_SetCursor(uint16_t Xpos, uint16_t Ypos){	  	    			
 	LCD_SetWindows(Xpos,Ypos,Xpos,Ypos);	
 } 
 
@@ -349,8 +298,7 @@ void LCD_SetCursor(uint16_t Xpos, uint16_t Ypos)
 													3-270 degree
  * @retvalue   :None
 ******************************************************************************/ 
-void LCD_direction(uint8_t direction)
-{ 
+void LCD_direction(uint8_t direction){ 
 		lcddev.setxcmd=0x2A;
 			lcddev.setycmd=0x2B;
 			lcddev.wramcmd=0x2C;
@@ -386,8 +334,4 @@ void LCD_direction(uint8_t direction)
 		default:break;
 	}	
 }	 
-
-
-
-
 

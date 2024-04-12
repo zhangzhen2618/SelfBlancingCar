@@ -9,7 +9,7 @@ void uart1_init(uint16_t baud){
     P0SEL |= BIT4 | BIT5; // configure the P0.4, P0.5 as alternative, RX=P0.5, TX=P0.4
     P2DIR |= BIT6; // P0, USART1 privit
 
-    // Configure the baudrate as 115200
+    // Configure the baudrate as baud
     U1BAUD = baud >> 8;
     U1GCR &= ~U1GCR_BAUD_E;
     U1GCR |= baud;

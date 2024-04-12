@@ -9,6 +9,7 @@
 // define the some x_reg
 SFRX(X_U1DBUF, 0X70F9);
 
+// bit set
 #define     BIT0                                0x01
 #define     BIT1                                0x02
 #define     BIT2                                0x04
@@ -17,6 +18,23 @@ SFRX(X_U1DBUF, 0X70F9);
 #define     BIT5                                0x20
 #define     BIT6                                0x40
 #define     BIT7                                0x80
+
+// 32MHz system clock baud rate configure
+#define     BAUD_2400                           (59 << 8 | 6)
+#define     BAUD_4800                           (59 << 8 | 7)
+#define     BAUD_9600                           (59 << 8 | 8)
+#define     BAUD_14400                          (216 << 8 | 8)
+#define     BAUD_19200                          (59 << 8 | 9)
+#define     BAUD_28800                          (216 << 8 | 9)
+#define     BAUD_38400                          (59 << 8 | 10)
+#define     BAUD_57600                          (216 << 8 | 10)
+#define     BAUD_76800                          (59 << 8 | 11)
+#define     BAUD_115200                         (216 << 8 | 11)
+#define     BAUD_230400                         (216 << 8 | 12)
+#define     BAUD_921600                         (216 << 8 | 14)
+#define     BAUD_MAX_2000000                    (0 << 8 | 16)
+#define     BAUD_SPI_MAX_4000000                (0 << 8 | 17)
+#define     BAUD_SPITXONLY_MAX_16000000         (0 << 8 | 19)
 
 #define     NULL_PTR                            0
 

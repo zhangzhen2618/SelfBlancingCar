@@ -1,6 +1,6 @@
 
 CC2530F256_SRC=buzzer.c \
-				cc2530_LCD.c \
+				CC2530_LCD.c \
 				rf.c \
 				sys_config.c \
 				dma.c \

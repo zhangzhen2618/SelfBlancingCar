@@ -1,14 +1,18 @@
-#include "cc2530_lcd.h"
+#include "CC2530_LCD.h"
 #include "buzzer.h"
 #include "rf.h"
 #include <stdio.h>
 #include <string.h>
+#include "spi.h"
 
 int main(){
     
     sys_init();
     buzzer_init();
-	LCD_Init();
+	
+    spi1_init(BAUD_SPITXONLY_MAX_16000000);
+    
+    LCD_Init(spi1_write_byte);
 
     RF_init();
 
@@ -38,9 +42,10 @@ int main(){
 
         RF_transmit(&mpdu_header, str, sizeof(str));
         
-        while(!(RFIRQF1 & RFIRQF1_TXDONE) );
+        while(!(RF_IRQF1_TXDONE_GET()));
 
-        RFIRQF1 = ~RFIRQF1_TXDONE;
+        RF_IRQF1_TXDONE_CLEAR();
+        
         // delay_ms(100);
         LCD_Clear(RED);
         // delay_ms(1000);
