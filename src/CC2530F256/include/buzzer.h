@@ -13,4 +13,5 @@ void buzzer_init(void);
 
 void buzzer_set_hz(uint16_t hz);
 
+void buzzer_test(void (*delay_ms)(uint16_t hz));
 #endif //f

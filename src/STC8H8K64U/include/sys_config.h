@@ -4,8 +4,10 @@
 #include "stc8h_bitdef.h"
 #include "STC8H.h"
 
-#define     MAIN_FOSC       48000000L   //定义主时
+// default main fosc 48MHz
+#define     MAIN_FOSC                   48000000L   //定义主时钟
+#define     UART_BAUD(baud)             (65536 - (MAIN_Fosc / baud + 2) / 4)
 
-// void hardware_init(void);
+void sys_init(void);
 
 #endif // !

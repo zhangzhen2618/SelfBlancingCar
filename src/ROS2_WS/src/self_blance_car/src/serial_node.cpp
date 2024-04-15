@@ -11,7 +11,13 @@ int main(int argc, const char** argv) {
 
     console_bridge::setLogLevel(console_bridge::CONSOLE_BRIDGE_LOG_DEBUG);
 
-    std::shared_ptr<SBCarSerial> my_serial = std::make_shared<SBCarSerial>("/dev/ttyUSB0", 2000000);
+    std::shared_ptr<SBCarSerial> my_serial;
+
+    if (argc == 2){
+        my_serial = std::make_shared<SBCarSerial>(argv[1], 2000000);
+    }else{
+        my_serial = std::make_shared<SBCarSerial>("/dev/ttyUSB0", 2000000);
+    }
 
     my_serial->connect();
 

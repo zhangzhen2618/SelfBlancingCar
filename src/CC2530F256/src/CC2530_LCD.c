@@ -10,14 +10,14 @@ static _lcd_dev lcddev;
 // write the byte funcation point
 void (*spi_write_byte)(uint8_t);
 
-void delay_ms(int count){
-	int i,j;
+void delay_ms(uint16_t count){
+	uint16_t i,j;
 	for(i=0;i<count;i++)
 			for(j=0;j<1000;j++);
 }
 // /* X1us */
-void delay_us(int count){
-	int i,j;
+void delay_us(uint16_t count){
+	uint16_t i,j;
 	for(i=0;i<count;i++)
 			for(j=0;j<1;j++);
 }

@@ -56,8 +56,8 @@
 #define LGRAYBLUE        			0XA651 //浅灰蓝色(中间层颜色)
 #define LBBLUE           			0X2B12 //浅棕蓝色(选择条目的反色)
 
-void delay_ms(int count);
-void delay_us(int count);
+void delay_ms(uint16_t count);
+void delay_us(uint16_t count);
 
 //LCD的画笔颜色和背景色	   
 // extern static uint16_t  POINT_COLOR;//默认红色    
@@ -91,8 +91,3 @@ void LCD_WriteRAM_Prepare(void);
 void LCD_direction(uint8_t direction );
 void LCD_WR_DATA_16Bit(uint16_t Data);
 #endif  
-	 
-	 
-
-
-
