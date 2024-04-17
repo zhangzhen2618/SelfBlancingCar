@@ -3,4 +3,9 @@
 
 #include "sys_config.h"
 
+
+void spi_send(uint8_t dat);
+
+void spi_init(void);
+
 #endif // !

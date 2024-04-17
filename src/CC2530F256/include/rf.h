@@ -31,6 +31,7 @@
 
 // RF COMMAND
 #define     RF_SRXON()                          (RFST = 0XD3)
+#define     RF_STXON()                          (RFST = 0XD9)
 #define     RF_SFLUSHRX()                       (RFST = 0XDD)
 #define     RF_SFLUSHTX()                       (RFST = 0XDE)
 #define     RF_ISRXON()                         (RFST = 0XE3)

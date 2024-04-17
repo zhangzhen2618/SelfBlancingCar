@@ -21,6 +21,8 @@ int main(){
     uart1_init(BAUD_MAX_2000000);
     uart1_dma_config();
 
+    sys_set_clock_32mhz();
+
     UART1_RX_INI_EN();
     INT_EN();
 

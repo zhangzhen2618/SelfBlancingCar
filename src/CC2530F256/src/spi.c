@@ -8,6 +8,9 @@ void spi0_init(uint16_t baud){
 
     // MISO->P0_2, MOSI->P0_3, CS->P0_4, SCLK->P0_5
     P0SEL |= BIT2 | BIT3 | BIT5;
+
+    // let the cs pin as 0
+    P2INP |= P2INP_PDUP0;
     
     // SPI0 has Priority, default
     USART0_AS_SPI();

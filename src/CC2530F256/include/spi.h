@@ -13,6 +13,7 @@
 
 #define     USART0_SPI_AS_MASTER()               (U0CSR &= ~U0CSR_SLAVE)
 #define     USART0_SPI_AS_SLAVE()                (U0CSR |= U0CSR_SLAVE)
+// #define     USART0_SPI_AS_SLAVE()                (U0CSR |= U0CSR_SLAVE, P2INP |= P2INP_PDUP0)
 
 #define     USART0_TX_FINSHED()                  (U0CSR & U0CSR_TX_BYTE)
 #define     USART0_TX_CLEAR()                    (U0CSR &= ~U0CSR_TX_BYTE)

@@ -64,4 +64,6 @@ SFRX(X_U1DBUF, 0X70F9);
 // init the system clock and other peripherals
 void sys_init(void);
 
+void sys_set_clock_32mhz(void);
+
 #endif // 

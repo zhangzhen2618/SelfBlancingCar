@@ -20,10 +20,11 @@
 static uint8_t rxBufferSlave[BUFFER_SIZE];
 
 int main(){
-    
+
     sys_init();
+    
     buzzer_init();
-	
+
     spi0_init(BAUD_SPITXONLY_MAX_16000000);
 
     spi1_init(BAUD_SPITXONLY_MAX_16000000);
@@ -32,7 +33,8 @@ int main(){
 
     RF_init();
 
-    P2INP |= P2INP_PDUP0;
+    sys_set_clock_32mhz();
+    // EA = 1;
 
     static char str[] = "Hello world!!!\n";
     static uint8_t tx_buf[MPDU_MAX_PKG_LEN] = {0};
@@ -56,8 +58,7 @@ int main(){
     mpdu_header.src_addr = RF_TE_DEFAULT_SHORTADDR;
 
 	while(1){	
-        
-        // RF_ISTXON();
+
         while (1){
             tx_count = 1;
             
