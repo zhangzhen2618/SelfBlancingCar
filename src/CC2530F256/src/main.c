@@ -36,6 +36,11 @@ int main(){
     sys_set_clock_32mhz();
     // EA = 1;
 
+    // P0_INT_EN();
+    // P0_0_INT_EN();
+    // P0_0_INT_DISEN();
+    // INT_EN();
+
     static char str[] = "Hello world!!!\n";
     static uint8_t tx_buf[MPDU_MAX_PKG_LEN] = {0};
     static uint8_t tx_count = 0;
@@ -45,7 +50,7 @@ int main(){
     // Note that the length byte itself is not included included in the packet length
     
     static MPDU_HEADER mpdu_header;
-    // mpdu_header.len = MPDU_HEADER_LEN + sizeof(str) + MPDU_FCS_LEN;
+    
 
     RF_SET_PANID(RF_TE_DEFAULT_PANDID);
     RF_SET_SHORTADDR(RF_TE_DEFAULT_SHORTADDR);
@@ -95,16 +100,20 @@ int main(){
             // break;
         }
         
+        // while(!(spi0_rx_dma_pkg_is_finished()));
+        // static uint8_t *rx_buf_ptr;
+        // rx_buf_ptr = spi0_get_rx_buf();
+        // RF_transmit(&mpdu_header, rx_buf_ptr, *rx_buf_ptr);
         
         // buzzer_set_hz(2000);
         // buzzer_test(delay_ms);
-        // delay_ms(100);
-        LCD_Clear(RED);
-        // delay_ms(1000);
-        LCD_Clear(GREEN);
+        // delay_ms(10);
+        // LCD_Clear(RED);
+        // // delay_ms(1000);
+        // LCD_Clear(GREEN);
         // delay_ms(1000);	
-        LCD_Clear(BLUE);
-        // delay_ms(1000);
+        // LCD_Clear(BLUE);
+        // // delay_ms(1000);
     }   
 }
 

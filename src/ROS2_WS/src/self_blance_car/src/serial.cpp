@@ -134,11 +134,26 @@ void SBCarSerial::do_read(void){
 }
 
 void SBCarSerial::parse_buff(uint8_t * buf, const size_t bufsize, size_t bytes_received){
+    static int count = 0;
+    std::cout << count++ << " : ";
 	std::cout << std::hex;
 	for(int i = 0; i < bytes_received; i++){
 		std::cout << (int)buf[i] << " ";
 	}
 	std::cout << std::dec << std::endl;
+
+    int16_t x = *(int16_t *)(buf + 21);
+    int16_t y = *(int16_t *)(buf + 23);
+    int16_t z = *(int16_t *)(buf + 25);
+
+    x *= 39;
+    y *= 39;
+    z *= 39;
+    std::cout << std::hex << "id = " << (int)buf[20] << std::dec;
+    std::cout << "imu: x = " << x / 1000.0
+            << ", y = " << y / 1000.0
+            << ", z = " << z / 1000.0
+            << std::endl;
 }
 
 void SBCarSerial::do_write(bool check_tx_state){

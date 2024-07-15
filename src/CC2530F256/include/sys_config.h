@@ -7,6 +7,7 @@
 #include <stdbool.h>
 
 // define the some x_reg
+SFRX(X_U0DBUF, 0X70C1);
 SFRX(X_U1DBUF, 0X70F9);
 
 // bit set
@@ -48,9 +49,20 @@ SFRX(X_U1DBUF, 0X70F9);
 #define     RF_ERR_INT_EN()                     (RFERRIE = 1)
 #define     RF_ERR_INT_DISEN()                  (RFERRIE = 0)
 
+// USART0_RX Interrupt (INT 2)
+#define     USART0_INT_EN()                     (URX0IE = 1)
+#define     USART0_INT_DISEN()                  (URX0IE = 0)
+
 // UART1_RX Interrupt (INT 3)
 #define     UART1_RX_INI_EN()                   (URX1IE = 1)
 #define     UART1_RX_INT_DISEN()                (URX1IE = 0)
+
+// USART0_TX Interrupt (INT 7)
+#define     USART0_TX_INT_EN()                  (IEN2 |= IEN2_UTX0IE)
+#define     USART0_TX_INT_DISEN()               (IEN2 &= ~IEN2_UTX0IE)
+
+#define     P0_INT_EN()                         (P0IE = 1)
+#define     P0_INT_DISEN()                      (P0IE = 0)
 
 // UART1_TX Interrupt (INT 14)
 #define     UART1_TX_INT_EN()                   (IEN2 |= IEN2_UTX1IE)

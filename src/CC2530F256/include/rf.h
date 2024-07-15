@@ -127,9 +127,9 @@ void RF_set_pkg_done_isr_fun(RF_RECEIVE_CB rx_cb);
 void RF_transmit(MPDU_HEADER *mpdu_header_ptr, uint8_t *tx_data, uint8_t data_len);
 
 // RF core error interrupter funcation
-void rf_error_isr(void) __interrupt(RFERR_VECTOR) __using(RFERR_VECTOR);
+void rf_error_isr(void) __interrupt(RFERR_VECTOR);
 
 // RF general interrupt funcation
-void rf_isr(void) __interrupt(RF_VECTOR) __using(RF_VECTOR);
+void rf_isr(void) __interrupt(RF_VECTOR);
 
 #endif // !

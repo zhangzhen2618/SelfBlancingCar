@@ -21,6 +21,26 @@ void uart1_init(uint16_t baud){
 void uart1_dma_config(void){
     // uart1_rx_dma_desc = dma_get_free_channel(&uart1_rx_dma_ch_num);
     uart1_tx_dma_desc = dma_get_free_channel(&uart1_tx_dma_ch_num);
+
+    // redefine the parameter
+    uart1_tx_dma_desc->DESTADDRH = (uint16_t)(&X_U1DBUF) >> 8;
+    uart1_tx_dma_desc->DESTADDRL = (uint16_t)(&X_U1DBUF);
+    
+    // Use fixed length DMA transfer count;
+    uart1_tx_dma_desc->VLEN = DMA_VLEN_1_P_VALOFFIRST;
+
+    // Transfer a single word after each DMA trigger;
+    uart1_tx_dma_desc->WORDSIZE = DMA_WORDSIZE_BYTE;
+    uart1_tx_dma_desc->TMODE = DMA_TMODE_SINGLE;
+
+    uart1_tx_dma_desc->TRIG = DMA_TRIG_UTX1;
+
+    uart1_tx_dma_desc->SRCINC = DMA_SRCINC_1;
+    uart1_tx_dma_desc->DESTINC = DMA_DESTINC_0;
+
+    uart1_tx_dma_desc->IRQMASK = DMA_IRQMASK_ENABLE;
+    uart1_tx_dma_desc->M8 = DMA_M8_USE_8_BITS;
+    uart1_tx_dma_desc->PRIORITY = DMA_PRI_LOW;
 }
 
 // transmit the data use uart1
@@ -59,26 +79,8 @@ void uart1_dma_transmit(uint8_t start_byte, uint8_t *txdata, uint16_t len){
     uart1_tx_dma_desc->SRCADDRH = (uint16_t)(txdata) >> 8;
     uart1_tx_dma_desc->SRCADDRL = (uint16_t)(txdata) & 0x00ff;
 
-    uart1_tx_dma_desc->DESTADDRH = (uint16_t)(&X_U1DBUF) >> 8;
-    uart1_tx_dma_desc->DESTADDRL = (uint16_t)(&X_U1DBUF);
     uart1_tx_dma_desc->LENH = (len >> 8) & 0xff;
     uart1_tx_dma_desc->LENL = (len) & 0xff;
-
-    // Use fixed length DMA transfer count;
-    uart1_tx_dma_desc->VLEN = DMA_VLEN_1_P_VALOFFIRST;
-
-    // Transfer a single word after each DMA trigger;
-    uart1_tx_dma_desc->WORDSIZE = DMA_WORDSIZE_BYTE;
-    uart1_tx_dma_desc->TMODE = DMA_TMODE_SINGLE;
-
-    uart1_tx_dma_desc->TRIG = DMA_TRIG_UTX1;
-
-    uart1_tx_dma_desc->SRCINC = DMA_SRCINC_1;
-    uart1_tx_dma_desc->DESTINC = DMA_DESTINC_0;
-
-    uart1_tx_dma_desc->IRQMASK = DMA_IRQMASK_ENABLE;
-    uart1_tx_dma_desc->M8 = DMA_M8_USE_8_BITS;
-    uart1_tx_dma_desc->PRIORITY = DMA_PRI_LOW;
 
     DMAARM &= ~uart1_tx_dma_ch_num;
     DMAARM |= uart1_tx_dma_ch_num;

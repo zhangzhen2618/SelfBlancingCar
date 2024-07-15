@@ -144,4 +144,8 @@ uint8_t dma_channel_is_used(uint8_t channel_num);
 
 // free the channel
 void dma_free_channel(uint8_t channel_num);
+
+// dma interrupt funcation
+void dma_int_funcation(void) __interrupt(DMA_VECTOR) __using(DMA_VECTOR);
+
 #endif

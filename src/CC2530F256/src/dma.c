@@ -64,3 +64,8 @@ void dma_free_channel(uint8_t channel_num){
     DMAARM &= ~channel_num; // disarm the dma channel
     dma_channel_used &= ~channel_num; // clear the flag of dma channel used
 }
+
+
+void dma_int_funcation(void) __interrupt(DMA_VECTOR) __using(DMA_VECTOR){
+    
+}

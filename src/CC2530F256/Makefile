@@ -4,7 +4,6 @@ CC2530F256_SRC=buzzer.c \
 				rf.c \
 				sys_config.c \
 				dma.c \
-				gpio.c \
 				spi.c \
 				main.c
 

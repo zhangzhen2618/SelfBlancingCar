@@ -18,6 +18,8 @@ void RF_init(void){
     AGCCTRL2  = 0xFE; // agc gain override 
     TXFILTCFG = 0x09; // tx filter configuration
 
+    FREQCTRL = 0x10; //chanel 2
+
     
 } 
 
@@ -50,14 +52,14 @@ void RF_transmit(MPDU_HEADER *mpdu_header_ptr, uint8_t *tx_data, uint8_t data_le
 }
 
 // RF core error interrupter funcation
-void rf_error_isr(void) __interrupt(RFERR_VECTOR) __using(RFERR_VECTOR){
+void rf_error_isr(void) __interrupt(RFERR_VECTOR){
     RFERRF = 0;
     RF_ISRXON();
 }
 
 
 // RF general interrupt funcation
-void rf_isr(void) __interrupt(RF_VECTOR) __using(RF_VECTOR){
+void rf_isr(void) __interrupt(RF_VECTOR){
     RF_INT_FLAG_CLEAR();
 
     if (RF_IRQF0_RXPKTDONE_GET()){

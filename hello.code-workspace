@@ -25,7 +25,8 @@
 	],
 	"settings": {
 		"files.associations": {
-
+			"imu.h": "c",
+			"i2c.h": "c"
 		},
 		"explorer.sortOrder": "type",
 		"explorer.fileNesting.enabled": true,

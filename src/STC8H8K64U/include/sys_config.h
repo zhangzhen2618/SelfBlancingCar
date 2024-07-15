@@ -3,6 +3,9 @@
 
 #include "STC8H.h"
 #include <stdint.h>
+#include <math.h>      
+#include <stdio.h>   
+#include <stdbool.h>
 
 #define     BIT0                        0x01
 #define     BIT1                        0x02

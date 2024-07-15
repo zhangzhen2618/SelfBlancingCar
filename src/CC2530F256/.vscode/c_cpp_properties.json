@@ -29,7 +29,9 @@
                     "__using(X)=",
                     "_at_=",
                     "_priority_=",
-                    "_task_="
+                    "_task_=",
+                    "true=1",
+                    "false=1"
                 ],
             "intelliSenseMode": "gcc-arm",
             // "compilerPath": "/usr/bin/sdcc",
