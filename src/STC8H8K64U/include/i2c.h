@@ -18,6 +18,10 @@ void i2c_write_byte_ack(uint8_t byte);
 uint8_t i2c_read_byte_ack();
 uint8_t i2c_read_byte_nak();
 
+uint8_t i2c_write_singal_reg(uint8_t addr, uint8_t reg, uint8_t data_);
+uint8_t i2c_read_regs(uint8_t addr, uint8_t reg, uint8_t *data_, uint8_t size);
+uint8_t i2c_write_regs(uint8_t addr, uint8_t reg, uint8_t *data_, uint8_t size);
+
 void I2C_isr() __interrupt(I2C_VECTOR) __using(I2C_VECTOR);
 
 #endif // ! 

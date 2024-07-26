@@ -101,10 +101,109 @@ uint8_t i2c_read_byte_nak(){
     return I2CRXD;
 }
 
+uint8_t i2c_write_singal_reg(uint8_t addr, uint8_t reg, uint8_t data_){
+    // start, write the addr and receive the ack
+    I2C_busy = 1;
+    I2CTXD = addr << 1;
+    I2C_START_SEND_ACK();
+    while(I2C_busy);
+
+    // write the reg
+    I2C_busy = 1;
+    I2CTXD = reg;
+    I2C_SEND_ACK();
+    while(I2C_busy);
+
+    // write the data
+    I2C_busy = 1;
+    I2CTXD = data_;
+    I2C_SEND_ACK();
+    while(I2C_busy);
+
+    // stop
+    I2C_busy = 1;
+    I2C_STOP();
+    while(I2C_busy);
+
+    return 0;
+}
+uint8_t i2c_read_regs(uint8_t addr, uint8_t reg, uint8_t *data_, uint8_t size){
+        
+    // start, write the addr and receive the ack
+    I2C_busy = 1;
+    I2CTXD = addr << 1;
+    I2C_START_SEND_ACK();
+    while(I2C_busy);
+
+    // write the reg
+    I2C_busy = 1;
+    I2CTXD = reg;
+    I2C_SEND_ACK();
+    while(I2C_busy);
+
+    // write the read address
+    I2C_busy = 1;
+    I2CTXD = (addr << 1) | 1;
+    I2C_START_SEND_ACK();
+    while(I2C_busy);
+
+    // read the data
+    uint8_t i = 0;
+
+    for(; i < size -1; i++){
+        I2C_busy = 1;
+        I2C_RECV_ACK();
+        while(I2C_busy);
+        data_[i] = I2CRXD;
+    }
+
+    I2C_busy = 1;
+    I2C_RECV_NAK();
+    while(I2C_busy);
+    data_[i] = I2CRXD;
+
+    // stop
+    I2C_busy = 1;
+    I2C_STOP();
+    while(I2C_busy);
+
+    return 0;
+}
+
+uint8_t i2c_write_regs(uint8_t addr, uint8_t reg, uint8_t *data_, uint8_t size){
+
+    // start, write the addr and receive the ack
+    I2C_busy = 1;
+    I2CTXD = addr << 1;
+    I2C_START_SEND_ACK();
+    while(I2C_busy);
+
+    // write the reg
+    I2C_busy = 1;
+    I2CTXD = reg;
+    I2C_SEND_ACK();
+    while(I2C_busy);
+
+    // write the data
+    for(uint8_t i = 0; i < size; i++){
+        I2C_busy = 1;
+        I2CTXD = data_[i];
+        I2C_SEND_ACK();
+        while(I2C_busy);
+    }
+
+    // stop
+    I2C_busy = 1;
+    I2C_STOP();
+    while(I2C_busy);
+
+    return 0;
+}
+
+
 void I2C_isr() __interrupt(I2C_VECTOR) __using(I2C_VECTOR){
     if (I2CMSST & 0x40){
         I2CMSST &= ~0x40;
         I2C_busy = 0;
     }
 }
-

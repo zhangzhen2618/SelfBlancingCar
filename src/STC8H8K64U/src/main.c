@@ -5,7 +5,8 @@
 #include "STC8H.h"
 #include "sys_config.h"
 #include "spi.h"
-#include "imu.h"
+
+#include "ADXL345.h"
 
 static uint8_t tx_buf[] = "000 Hello world\n";
 static uint8_t tx_count = 0;
@@ -26,7 +27,7 @@ void main(void){
 
     i2c_init();
 
-    Init_ADXL345();
+    ADXL345_init();
 
     uint8_t devid;
 
@@ -38,10 +39,11 @@ void main(void){
         tx_buf[0] = tx_count / 100;
         tx_count++;
         
-        tx_buf[4] = Single_Read_ADXL345(0X00);//读出的数据为0XE5,表示正确
-        devid = Single_Read_ADXL345(0x00);
-        uint8_t* imu_data_ptr = Multiple_read_ADXL345();
-        memcpy(tx_buf + 5, imu_data_ptr, 6);
+        // tx_buf[4] = Single_Read_ADXL345(0X00);//读出的数据为0XE5,表示正确
+        tx_buf[4] = ADXL345_getDeviceID();
+        // uint8_t* imu_data_ptr = Multiple_read_ADXL345();
+        // memcpy(tx_buf + 5, imu_data_ptr, 6);
+        ADXL345_get_xyz(tx_buf + 5);
         P4_7 = 1;
         spi_send(0xAA);
         spi_send(sizeof(tx_buf) + 1);

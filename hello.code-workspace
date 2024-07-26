@@ -1,10 +1,6 @@
 {
 	"folders": [
 		{
-			"name": "BUILD",
-			"path": ".build"
-		},
-		{
 			"name": "WORKSPACE",
 			"path": "."
 		},
@@ -21,6 +17,10 @@
 		},
 		{	"name": "ROS2_WS",
 			"path": "src/ROS2_WS/"
+		},
+		{
+			"name": "BUILD",
+			"path": ".build"
 		},
 	],
 	"settings": {
