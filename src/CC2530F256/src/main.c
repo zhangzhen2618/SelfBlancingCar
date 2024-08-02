@@ -5,6 +5,8 @@
 #include <string.h>
 #include "spi.h"
 
+#include "crc.h"
+
 // These values will give a baud rate of approx. 1.002930 Mbps for 26 MHz clock
 #define SPI_BAUD_M  60
 #define SPI_BAUD_E  15
@@ -87,7 +89,8 @@ int main(){
                 while (!(U0CSR & U0CSR_RX_BYTE));
                 U0CSR &= ~U0CSR_RX_BYTE;
                 tx_buf[tx_count] = U0DBUF;
-            }while((tx_count++) != tx_buf[2] + 2 && tx_count < MPDU_MAX_PKG_LEN);
+            }while((++tx_count) != tx_buf[2] && tx_count < MPDU_MAX_PKG_LEN);
+            
 
             mpdu_header.seq_num++;
 

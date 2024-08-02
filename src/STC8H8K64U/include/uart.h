@@ -7,4 +7,8 @@
 
 void uart_init(void);
 
+void uart_send(char dat);
+
+void Uartlsr() __interrupt(UART1_VECTOR) __using(UART1_VECTOR);
+
 #endif

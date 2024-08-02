@@ -3,11 +3,15 @@
 #include "uart.h"
 #include <stdio.h>
 
+#include "crc.h"
+
 void pkg_rx_done_cb(uint8_t *rx_data, uint8_t len);
 
 int main(){
     
     sys_init();
+    
+    crc16_init(DEFAULT_CRC_BITS, DEFAULT_CRC_POLY);
 
     RF_init();
 
@@ -40,5 +44,8 @@ int main(){
 }
 
 void pkg_rx_done_cb(uint8_t *rx_data, uint8_t len){
+    *(uint16_t*)(rx_data + rx_data[0] + 1) = 
+        crc16_calc(rx_data + 1, rx_data[0], DEFAULT_CRC_START_VALUE);
+    rx_data[0] += 2;
     uart1_dma_transmit(0xA7, rx_data, len);
 }

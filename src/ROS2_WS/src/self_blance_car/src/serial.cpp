@@ -1,4 +1,3 @@
-
 #include <linux/serial.h>
 
 #include <cassert>
@@ -17,12 +16,13 @@ using std::error_code;
 using std::lock_guard;
 
 SBCarSerial::SBCarSerial(
-    std::string device, 
-    unsigned baudrate,
-	bool hwflow)
+    const std::string device, 
+    const unsigned baudrate,
+	const bool hwflow)
 	: io_service(),
 	serial_dev(io_service),
-	tx_in_progress(false){
+	tx_in_progress(false),
+    parse_msg(nullptr){
 
   	using SPB = asio::serial_port_base;
 	
@@ -41,7 +41,6 @@ SBCarSerial::SBCarSerial(
 		serial_dev.set_option(
 		SPB::flow_control(
 			(hwflow) ? SPB::flow_control::hardware : SPB::flow_control::none));
-
 		// Enable low latency mode on Linux
 		{
 			int fd = serial_dev.native_handle();
@@ -62,8 +61,9 @@ SBCarSerial::~SBCarSerial(){
   	close();
 }
 
-void SBCarSerial::connect(void){
-
+void SBCarSerial::connect(std::function<void (const uint8_t *, size_t)> msg_cb){
+    
+    parse_msg = msg_cb;
 	// message_received_cb = cb_handle_message;
 
 	// give some work to io_service before start
@@ -128,14 +128,18 @@ void SBCarSerial::do_read(void){
 			sthis->close();
 			return;
 		}
-		sthis->parse_buff(sthis->rx_buf.data(), sthis->rx_buf.size(), bytes_transferred);
+        if (sthis->parse_msg != nullptr){
+            sthis->parse_msg(sthis->rx_buf.data(), bytes_transferred);
+        }else{
+		    sthis->default_parse_msg(sthis->rx_buf.data(), sthis->rx_buf.size(), bytes_transferred);
+        }
 		sthis->do_read();
     });
 }
 
-void SBCarSerial::parse_buff(uint8_t * buf, const size_t bufsize, size_t bytes_received){
+void SBCarSerial::default_parse_msg(uint8_t * buf, const size_t bufsize, size_t bytes_received){
     static int count = 0;
-    std::cout << count++ << " : ";
+    std::cout << count++ << ", num, " << bytes_received << " : ";
 	std::cout << std::hex;
 	for(int i = 0; i < bytes_received; i++){
 		std::cout << (int)buf[i] << " ";
@@ -177,29 +181,29 @@ void SBCarSerial::do_write(bool check_tx_state){
 
 		[sthis](error_code error, size_t bytes_transferred) {
 
-		assert(ssize_t(bytes_transferred) <= sthis->tx_q.size());
+            assert(ssize_t(bytes_transferred) <= sthis->tx_q.size());
 
-		if (error) {
-			CONSOLE_BRIDGE_logError("write: %s", error.message().c_str());
-			sthis->close();
-			return;
-		}
+            if (error) {
+                CONSOLE_BRIDGE_logError("write: %s", error.message().c_str());
+                sthis->close();
+                return;
+            }
 
-		// sthis->iostat_tx_add(bytes_transferred);
-		lock_guard lock(sthis->mutex);
+            // sthis->iostat_tx_add(bytes_transferred);
+            lock_guard lock(sthis->mutex);
 
-		sthis->tx_q.erase(sthis->tx_q.begin(), sthis->tx_q.begin() + bytes_transferred);
-		
-		if (sthis->tx_q.empty()) {
-			sthis->tx_in_progress = false;
-			return;
-		}
+            sthis->tx_q.erase(sthis->tx_q.begin(), sthis->tx_q.begin() + bytes_transferred);
+            
+            if (sthis->tx_q.empty()) {
+                sthis->tx_in_progress = false;
+                return;
+            }
 
-		if (!sthis->tx_q.empty()) {
-			sthis->do_write(false);
-		} else {
-			sthis->tx_in_progress = false;
-		}
-		});
+            if (!sthis->tx_q.empty()) {
+                sthis->do_write(false);
+            } else {
+                sthis->tx_in_progress = false;
+            }
+	});
 }
 

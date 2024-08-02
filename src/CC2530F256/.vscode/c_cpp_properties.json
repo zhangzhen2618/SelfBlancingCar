@@ -4,6 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
+                "${workspaceFolder}/../COMMON/include/",
                 "/usr/share/sdcc/include/**"
             ],
             "defines": [

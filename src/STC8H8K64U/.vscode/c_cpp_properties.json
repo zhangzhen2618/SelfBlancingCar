@@ -4,6 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
+                "${workspaceFolder}/../COMMON/include/",
                 "/usr/share/sdcc/include/**",
                 "/usr/include/x86_64-linux-gnu/",
                 "/usr/include/x86_64-linux-gnu/c++/13/"

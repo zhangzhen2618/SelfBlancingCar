@@ -7,16 +7,20 @@ CC2530F256_SRC=buzzer.c \
 				spi.c \
 				main.c
 
+CC2530F256_COMM_SRC=crc.c
+
 CC2530F256_PC_SRC=rf.c \
 				sys_config.c \
 				uart.c \
 				dma.c \
 				main_pc.c
+CC2530F256_PC_COMM_SRC=crc.c
 
 CC2530F256: 
 	@${MAKE} -f sdcc_rules.mk TARGET_NAME=$@ \
-		INCLUDE_PATH=-I./src/CC2530F256/include \
-		C_SOURCES="$(addprefix ./src/CC2530F256/src/,${CC2530F256_SRC})"\
+		INCLUDE_PATH="-I./src/CC2530F256/include -I./src/COMMON/include"\
+		C_SOURCES="$(addprefix ./src/CC2530F256/src/,${CC2530F256_SRC})\
+		 $(addprefix ./src/COMMON/src/,${CC2530F256_COMM_SRC})"\
 		ASM_SOURCES= \
 		CPU=CC2530F256
 
@@ -31,8 +35,9 @@ upload_CC2530F256: CC2530F256
 
 CC2530F256_PC: 
 	@${MAKE} -f sdcc_rules.mk TARGET_NAME=$@ \
-		INCLUDE_PATH=-I./src/CC2530F256/include \
-		C_SOURCES="$(addprefix ./src/CC2530F256/src/,${CC2530F256_PC_SRC})"\
+		INCLUDE_PATH="-I./src/CC2530F256/include -I./src/COMMON/include"\
+		C_SOURCES="$(addprefix ./src/CC2530F256/src/,${CC2530F256_PC_SRC})\
+		 $(addprefix ./src/COMMON/src/,${CC2530F256_PC_COMM_SRC})"\
 		ASM_SOURCES= \
 		CPU=CC2530F256
 

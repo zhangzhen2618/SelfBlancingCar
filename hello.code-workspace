@@ -5,6 +5,10 @@
 			"path": "."
 		},
 		{
+			"name": "COMMON",
+			"path": "src/COMMON",
+		},
+		{
 			"name": "DOCUMENT",
 			"path": "doc"
 		},
@@ -21,12 +25,14 @@
 		{
 			"name": "BUILD",
 			"path": ".build"
-		},
+		}
 	],
 	"settings": {
 		"files.associations": {
 			"imu.h": "c",
-			"i2c.h": "c"
+			"i2c.h": "c",
+			"crc.h": "c",
+			"stdint.h": "c"
 		},
 		"explorer.sortOrder": "type",
 		"explorer.fileNesting.enabled": true,

@@ -39,8 +39,8 @@ all: show_message ${TARGET_DIR} ${IHX} ${HEX} ${BINARY}
 show_message:
 	@${ECHO} "*****************build Target : ${TARGET_NAME} ***********************\n"
 	@date
-	@${ECHO} "Target : ${TARGET_NAME}"
-	@${ECHO} "CPU: ${CPU}"
+	@${ECHO} "Target : 		${TARGET_NAME}"
+	@${ECHO} "CPU: 			${CPU}"
 	@${ECHO} "sources file : \n $(addprefix "\\n\\t",${C_SOURCES})"
 	@${ECHO} "\n*****************build Target : ${TARGET_NAME} ***********************\n"
 

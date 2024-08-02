@@ -1,7 +1,7 @@
 
 #include "ADXL345.h"
 
-#define write_reg(reg, data_)                   i2c_write_singal_reg(ADXL345_DEFAULT_ADDRESS, reg, data_)
+#define write_reg(reg, data_)               i2c_write_singal_reg(ADXL345_DEFAULT_ADDRESS, reg, data_)
 #define read_regs(reg, data_, size_)        i2c_read_regs(ADXL345_DEFAULT_ADDRESS, reg, data_, size_)
 #define write_regs(reg, data_, size_)       i2c_write_regs(ADXL345_DEFAULT_ADDRESS, reg, data_, size_)
 

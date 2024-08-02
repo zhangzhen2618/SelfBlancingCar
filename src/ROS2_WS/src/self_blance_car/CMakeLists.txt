@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(self_blance_car)
+project(self_blance_car )
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -22,12 +22,25 @@ include_directories(
   	${ASIO_INCLUDE_DIRS}
   	${console_bridge_INCLUDE_DIRS}
 )
+set_source_files_properties(
+  ${PROJECT_SOURCE_DIR}/../../../COMMON/src/crc.c 
+  PROPERTIES LANGUAGE CXX )
+  
+add_executable(serial_node
+    ${PROJECT_SOURCE_DIR}/../../../COMMON/src/crc.c
+    src/serial.cpp
+    src/self_blance_car_node.cpp
+    src/self_blance_car_node_main.cpp)
 
-add_executable(serial_node 
-              src/serial.cpp
-              src/serial_node.cpp)
-
-ament_target_dependencies(serial_node console_bridge rclcpp)
+target_include_directories(serial_node
+    PRIVATE 
+        ${PROJECT_SOURCE_DIR}/../../../COMMON/include
+)
+ament_target_dependencies(
+  serial_node 
+  console_bridge 
+  rclcpp 
+  sensor_msgs)
 
 install(TARGETS
 	serial_node
