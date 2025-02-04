@@ -98,15 +98,31 @@ void SBCar_node::messages_parase_(const uint8_t *data, size_t size){
         return;        
     }
 
-    std::cout << "Size : " << ((msg_buf_[PKG_SIZE_INDEX] + PKG_HEADER_SIZE) & 0xff)
-            << ", data : ";
-    std::cout << std::hex;
+    // std::cout << "Size : " << ((msg_buf_[PKG_SIZE_INDEX] + PKG_HEADER_SIZE) & 0xff)
+    //         << ", data : ";
+    // std::cout << std::hex;
 
-    for(int i = 0; i < msg_buf_[PKG_SIZE_INDEX] + PKG_HEADER_SIZE; i++){
-        std::cout << (msg_buf_[i] & 0xff) << " ";
-    }
+    // for(int i = 0; i < msg_buf_[PKG_SIZE_INDEX] + PKG_HEADER_SIZE; i++){
+    //     std::cout << (msg_buf_[i] & 0xff) << " ";
+    // }
 
-    std::cout << std::dec << std::endl;
+    // std::cout << std::dec << std::endl;
+
+    pkg_t *pkg_type = (pkg_t*)(msg_buf_.data());
+
+    RCLCPP_INFO(get_logger(), "\nHeader : 0X%X, Size : %d, fcf : 0X%X, seq_num : %d"
+    "\ndest_pan : 0X%X, dest_addr 0X%X, src_pan : 0X%X, src_addr : 0X%X"
+    "\nerror_count : %d, sub_header : 0X%X, sub_size : %d, sub_seq_num : %d"
+    "\nADXL345_ID : 0X%X, acc_x : %f, acc_y : %f, acc_z : %f"
+    "\nBM180_ID : 0X%X",
+        pkg_type->header & 0xff, pkg_type->len, pkg_type->fcf & 0xffff, pkg_type->seq_num,
+        pkg_type->dest_pan & 0xffff, pkg_type->dest_addr & 0xffff, 
+        pkg_type->src_pan & 0xffff, pkg_type->src_addr & 0xffff,
+        pkg_type->error_count, pkg_type->sub_header & 0xff, pkg_type->sub_size, pkg_type->sub_seq_num,
+        pkg_type->ADXL345_ID & 0xff, 
+        pkg_type->acc_x * 39.0 / 1000.0, pkg_type->acc_y * 39.0 / 1000, pkg_type->acc_z * 39.0 / 1000,
+        pkg_type->BM180_ID & 0xff
+        );
 
     msg_buf_ptr_ -= (PKG_HEADER_SIZE + msg_buf_[PKG_SIZE_INDEX]);
 

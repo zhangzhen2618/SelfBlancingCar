@@ -6,6 +6,8 @@
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/joy.hpp"
 
+#define     PACKED                  __attribute__((packed)) // Don't use byte align
+
 namespace SelfBlanceCar{
 
 class SBCar_node : public rclcpp::Node{
@@ -32,7 +34,8 @@ private:
     static constexpr uint8_t PKG_SIZE_INDEX = 1;
     static constexpr uint8_t PKG_DATA_INDEX = 2;
 
-    struct pkg_t{
+    struct PACKED pkg_t {
+        uint8_t header;
         uint8_t len;
         uint16_t fcf;
         uint8_t seq_num;
@@ -40,6 +43,15 @@ private:
         uint16_t dest_addr;
         uint16_t src_pan;
         uint16_t src_addr;
+        uint8_t error_count;
+        uint8_t sub_header;
+        uint8_t sub_size;
+        uint8_t sub_seq_num;
+        uint8_t ADXL345_ID;
+        int16_t acc_x;
+        int16_t acc_y;
+        int16_t acc_z;
+        uint8_t BM180_ID;
     };
 
     std::shared_ptr<SBCarSerial> serial_dev_;

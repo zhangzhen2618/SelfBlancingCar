@@ -6,6 +6,7 @@ void buzzer_init(void){
     // timer1 alt2, chanel 2, P1.0
     PERCFG |= PERCFG_T1CFG; // TIMER1 alt2
     P1SEL |= BIT0; // P1.0  peripheral funcation
+    // P2SEL |= P2SEL_PRI1P1; // timer4 have priority, not affect the 
 
     // TIMER1 DIV BY 128 and mode modulo
     T1CTL &= ~(T1CTL_DIV | T1CTL_MODE);

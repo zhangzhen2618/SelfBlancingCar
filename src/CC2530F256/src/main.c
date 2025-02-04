@@ -26,7 +26,7 @@ int main(){
     sys_init();
     
     buzzer_init();
-
+    
     spi0_init(BAUD_SPITXONLY_MAX_16000000);
 
     spi1_init(BAUD_SPITXONLY_MAX_16000000);
@@ -36,12 +36,11 @@ int main(){
     RF_init();
 
     sys_set_clock_32mhz();
-    // EA = 1;
 
     // P0_INT_EN();
     // P0_0_INT_EN();
     // P0_0_INT_DISEN();
-    // INT_EN();
+    INT_EN();
 
     static char str[] = "Hello world!!!\n";
     static uint8_t tx_buf[MPDU_MAX_PKG_LEN] = {0};
@@ -53,7 +52,6 @@ int main(){
     
     static MPDU_HEADER mpdu_header;
     
-
     RF_SET_PANID(RF_TE_DEFAULT_PANDID);
     RF_SET_SHORTADDR(RF_TE_DEFAULT_SHORTADDR);
 
@@ -64,6 +62,13 @@ int main(){
     mpdu_header.src_pan = RF_TE_DEFAULT_PANDID;
     mpdu_header.src_addr = RF_TE_DEFAULT_SHORTADDR;
 
+    // P0DIR = 0; // input
+    // P0INP = 0; // pull up
+    // P2INP &= (~BIT5);
+    // P2INP |= BIT5; 
+    // P2INP |= P2INP_PDUP0;
+    buzzer_set_hz(1000);
+    // buzzer_start();
 	while(1){	
 
         while (1){
@@ -71,7 +76,7 @@ int main(){
             
             U0CSR &= ~U0CSR_RX_BYTE;
             while (!(U0CSR & U0CSR_RX_BYTE));
-            U0CSR &= ~U0CSR_RX_BYTE;
+            // U0CSR &= ~U0CSR_RX_BYTE;
             tx_buf[tx_count++] = U0DBUF;
             
             if (tx_buf[1] != 0xAA){
@@ -80,14 +85,16 @@ int main(){
             }
 
             
-            while (!(U0CSR & U0CSR_RX_BYTE));
             U0CSR &= ~U0CSR_RX_BYTE;
+            while (!(U0CSR & U0CSR_RX_BYTE));
+            // U0CSR &= ~U0CSR_RX_BYTE;
 
             tx_buf[tx_count++] = U0DBUF;
 
             do{
-                while (!(U0CSR & U0CSR_RX_BYTE));
                 U0CSR &= ~U0CSR_RX_BYTE;
+                while (!(U0CSR & U0CSR_RX_BYTE));
+                // U0CSR &= ~U0CSR_RX_BYTE;
                 tx_buf[tx_count] = U0DBUF;
             }while((++tx_count) != tx_buf[2] && tx_count < MPDU_MAX_PKG_LEN);
             
@@ -107,16 +114,20 @@ int main(){
         // static uint8_t *rx_buf_ptr;
         // rx_buf_ptr = spi0_get_rx_buf();
         // RF_transmit(&mpdu_header, rx_buf_ptr, *rx_buf_ptr);
-        
+        // if (P0_0){
+        //     LCD_Clear(RED);
+        // }else{
+        //     LCD_Clear(GREEN);
+        // }
         // buzzer_set_hz(2000);
+        // buzzer_start();
         // buzzer_test(delay_ms);
-        // delay_ms(10);
         // LCD_Clear(RED);
-        // // delay_ms(1000);
+        // delay_ms(1000);
         // LCD_Clear(GREEN);
         // delay_ms(1000);	
         // LCD_Clear(BLUE);
-        // // delay_ms(1000);
+        // delay_ms(1000);
     }   
 }
 

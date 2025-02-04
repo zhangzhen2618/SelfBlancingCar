@@ -21,4 +21,4 @@ clean_STC8H8K64U:
 
 upload_STC8H8K64U: STC8H8K64U
 	@${ECHO} "Uploading target : ${BUILD_DIR_ROOT}/STC8H8K64U/STC8H8K64U.hex"
-	@stcgal -P stc8d -t 48000 -p ${PORT}  ${BUILD_DIR_ROOT}/STC8H8K64U/STC8H8K64U.hex
+	@stcgal -P stc8d -o reset_pin_enabled=True -r false -t 48000 -p ${PORT}  ${BUILD_DIR_ROOT}/STC8H8K64U/STC8H8K64U.hex 

@@ -11,13 +11,19 @@ static uint8_t spi0_rx_dma_ch_num;
 // default as slave mode
 void spi0_init(uint16_t baud){
 
+    // config the P0_0 the rasing edge interrupt
+    P0DIR &= ~BIT0; // P0_0 input
+    P0INP &= ~BIT0; // P0_0 pull_up
+    // let the cs pin as 0
+    
+    P2INP |= P2INP_PDUP0;
+    
     // USART0 SPI ALT1, 
     PERCFG &= ~PERCFG_U0CFG;
 
     // MISO->P0_2, MOSI->P0_3, CS->P0_4, SCLK->P0_5
     P0SEL |= BIT2 | BIT3 | BIT5;
 
-    
     // SPI0 has Priority, default
     USART0_AS_SPI();
 
@@ -34,12 +40,6 @@ void spi0_init(uint16_t baud){
     U0GCR &= ~U1GCR_BAUD_E;
     U0GCR |= baud;
 
-    // config the P0_0 the rasing edge interrupt
-    P0DIR &= ~BIT0; // P0_0 input
-    P0INP &= ~BIT0; // P0_0 pull_up
-    // let the cs pin as 0
-    
-    P2INP |= P2INP_PDUP0;
 
     // P0_0_INT_EN();
 }
