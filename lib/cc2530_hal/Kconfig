@@ -5,8 +5,8 @@ config USE_CC2530_HAL
       Use the CC2530_HAL lib for the TI CC2530.
     
 
-config UART0_ENABLE
-    bool "Enable UART0"
+config UART_ENABLE
+    bool "Enable UART"
     default n
     help
-      Enable UART0 for the CC2530.
+      Enable UART for the CC2530.

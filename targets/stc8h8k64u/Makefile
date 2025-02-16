@@ -1,25 +1,23 @@
-
 BUILD_DIR_ROOT ?= ../../.build
 TOOLS_DIR ?= ../../tools
 ECHO ?= echo 
 Q ?= @
-TARGET_NAME:=cc2530_remote
+TARGET_NAME:=stc8h8k64u
 TARGET_PATH:=${BUILD_DIR_ROOT}/${TARGET_NAME}
 PYTHON_EXE ?= python3
 
-CC2530_LIB_PATH ?= ../../lib/cc2530_hal
-CC2530_RULES_MK ?= ../../lib/sdcc_rules.mk
+STC8H8K64U_RULES_MK ?= ../../lib/sdcc_rules.mk
 COMMON_LIB_PATH ?= ../../lib/common
 
 include .config
-include ../../lib/cc2530_hal/cc2530_hal.mk
+# include ../../lib/cc2530_hal/cc2530_hal.mk
 include ../../lib/common/common.mk
 
 # addprefix of the cc2530_hal library
-CSRCS:=$(addprefix ${CC2530_LIB_PATH}/,$(CSRCS))
+# CSRCS:=$(addprefix ${CC2530_LIB_PATH}/,$(CSRCS))
 CSRCS+=$(addprefix ${COMMON_LIB_PATH}/,$(COMMON_SRCS))
 
-HEADERS:=$(addprefix ${CC2530_LIB_PATH}/include/,$(HEADERS))
+# HEADERS:=$(addprefix ${CC2530_LIB_PATH}/include/,$(HEADERS))
 HEADERS+=$(addprefix ${COMMON_LIB_PATH}/include/,$(COMMON_HEADERS))
 
 INCLUDE_PATH := -I${CC2530_LIB_PATH}/include \
@@ -54,13 +52,13 @@ ${TARGET_PATH}/config.h:.config ${TARGET_PATH}
 
 ${TARGET_NAME}: ${TARGET_PATH}/config.h
 	${Q}echo "Building target ${TARGET_NAME}"
-	${Q}${MAKE} -f ${CC2530_RULES_MK} \
+	${Q}${MAKE} -f ${STC8H8K64U_RULES_MK} \
 		TARGET_NAME=$@ TARGET_DIR=${TARGET_PATH} \
 		INCLUDE_PATH="${INCLUDE_PATH}" \
 		C_SOURCES="${CSRCS}" \
 		HEADER_FILES="${HEADERS}" \
 		ASM_SOURCES= \
-		CPU=CC2530F256
+		CPU=STC8H8K64U
 
 clean:
 	${Q}echo "Cleaning target ${TARGET_NAME}"
@@ -68,8 +66,9 @@ clean:
 
 upload: ${TARGET_NAME}
 	${Q}echo "Uploading target ${TARGET_NAME}"
-	${Q}sudo cc-tool -f -e -v -w ${TARGET_PATH}/${TARGET_NAME}.hex
+	${Q}stcgal -P stc8d -o reset_pin_enabled=True -r false -t 48000 -p ${PORT}  ${BUILD_DIR_ROOT}/${TARGET_NAME}/${TARGET_NAME}.hex 
 
 list: 
 	${Q}echo "Available targets:"
 	${Q}echo "\t ${TARGET_NAME}\n\t clean \n\t upload \n\t list"
+

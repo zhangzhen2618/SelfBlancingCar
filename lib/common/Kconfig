@@ -1,0 +1,6 @@
+config COMMON_CRC_ENABLE
+    bool "include CRC checksumming of the common block" 
+    default n
+    help
+      Enable CRC checksumming of the common block.
+    

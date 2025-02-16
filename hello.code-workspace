@@ -33,7 +33,7 @@
 		},
 		{
 			"name": "STC8H8K64U",
-			"path": "targets/STC8H8K64U"
+			"path": "targets/stc8h8k64u"
 		},
 		{	"name": "ROS2_WS",
 			"path": "targets/ROS2_WS/"
@@ -48,7 +48,9 @@
 			"cstdint": "cpp",
 			"hal_clock.h": "c",
 			"hal_mcu.h": "c",
-			"hal_defs.h": "c"
+			"hal_defs.h": "c",
+			"stdio.h": "c",
+			"sdcc-lib.h": "c"
 		},
 		"explorer.sortOrder": "type",
 		"explorer.fileNesting.enabled": true,

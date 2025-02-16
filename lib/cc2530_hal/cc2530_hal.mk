@@ -8,7 +8,7 @@ CSRCS += src/hal_clock.c\
 		src/hal_mcu.c
 endif
 
-ifeq ($(CONFIG_UART0_ENABLE),y)
-HEADERS += hal_uart0.h
-CSRCS += src/hal_uart0.c
+ifeq ($(CONFIG_UART_ENABLE),y)
+HEADERS += hal_uart.h
+CSRCS += src/hal_uart.c
 endif

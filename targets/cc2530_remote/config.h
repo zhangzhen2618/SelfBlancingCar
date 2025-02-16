@@ -1,1 +1,0 @@
-#define CONFIG_UART0_ENABLE 1
