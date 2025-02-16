@@ -1,0 +1,12 @@
+config USE_CC2530_HAL
+    bool "Use the CC2530 HAL for the CC2530 platform"
+    default y
+    help
+      Use the CC2530_HAL lib for the TI CC2530.
+    
+
+config UART0_ENABLE
+    bool "Enable UART0"
+    default n
+    help
+      Enable UART0 for the CC2530.

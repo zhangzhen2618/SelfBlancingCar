@@ -1,30 +1,42 @@
 {
 	"folders": [
 		{
+			"name": "BUILD",
+			"path": ".build"
+		},
+		{
 			"name": "WORKSPACE",
 			"path": "."
 		},
 		{
 			"name": "COMMON",
-			"path": "src/COMMON",
+			"path": "lib/common",
 		},
 		{
 			"name": "DOCUMENT",
 			"path": "doc"
 		},
 		{
-			"name": "CC2530F256",
-			"path": "src/CC2530F256"
+			"name": "CC2530_HAL",
+			"path": "lib/cc2530_hal"
 		},
-		{	"name": "STC8H8K64U",
-			"path": "src/STC8H8K64U/"
-		},
-		{	"name": "ROS2_WS",
-			"path": "src/ROS2_WS/"
+		{	"name": "STC8H8K64U_HAL",
+			"path": "lib/stc8h8k64u_hal"
 		},
 		{
-			"name": "BUILD",
-			"path": ".build"
+			"name": "CC2530_LOCAL",
+			"path": "targets/cc2530_local"
+		},
+		{
+			"name": "CC2530_REMOTE",
+			"path": "targets/cc2530_remote"
+		},
+		{
+			"name": "STC8H8K64U",
+			"path": "targets/STC8H8K64U"
+		},
+		{	"name": "ROS2_WS",
+			"path": "targets/ROS2_WS/"
 		}
 	],
 	"settings": {
@@ -32,7 +44,11 @@
 			"imu.h": "c",
 			"i2c.h": "c",
 			"crc.h": "c",
-			"stdint.h": "c"
+			"stdint.h": "c",
+			"cstdint": "cpp",
+			"hal_clock.h": "c",
+			"hal_mcu.h": "c",
+			"hal_defs.h": "c"
 		},
 		"explorer.sortOrder": "type",
 		"explorer.fileNesting.enabled": true,

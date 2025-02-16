@@ -1,0 +1,1 @@
+source '../../lib/cc2530_hal/Kconfig'

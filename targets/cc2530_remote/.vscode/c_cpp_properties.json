@@ -3,9 +3,12 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**",
-                "${workspaceFolder}/../COMMON/include/",
-                "/usr/share/sdcc/include/**"
+                "${workspaceFolder}/include/",
+                "/usr/share/sdcc/include/",
+                "/usr/share/sdcc/include/mcs51/",
+                "/usr/share/sdcc/include/**",
+                "${workspaceFolder}/../../lib/common/include/",
+                "${workspaceFolder}/../../lib/cc2530_hal/include/"
             ],
             "defines": [
                     // "__SDCC",
@@ -32,7 +35,10 @@
                     "_priority_=",
                     "_task_=",
                     "true=1",
-                    "false=1"
+                    "false=1",
+                    "NOP()=",
+                    "__asm=",
+                    "__endasm="
                 ],
             "intelliSenseMode": "gcc-arm",
             // "compilerPath": "/usr/bin/sdcc",

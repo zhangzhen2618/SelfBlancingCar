@@ -1,0 +1,2 @@
+# TI CC2530 LIB FOR SDCC
+
