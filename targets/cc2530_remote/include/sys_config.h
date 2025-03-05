@@ -1,81 +1,38 @@
 #ifndef __SYS_CENFIG_H__
 #define __SYS_CENFIG_H__
 
-#include "cc2530.h"
-#include "cc2530io_bitdef.h"
-#include <stdint.h>
-#include <stdbool.h>
+#include "hal_dma.h"
+#include "hal_uart.h"
+#include "hal_mcu.h"
+#include "crc.h"
+#include "protocol.h"
 
-// define the some x_reg
-SFRX(X_U0DBUF, 0X70C1);
-SFRX(X_U1DBUF, 0X70F9);
+// DMA channel config
+#define UART1_TX_DMA_CH                             DMA_CHANNEL_1
+#define UART1_RX_DMA_CH                             DMA_CHANNEL_2
+#define RF_DMA_CH                                   DMA_CHANNEL_3
 
-// bit set
-#define     BIT0                                0x01
-#define     BIT1                                0x02
-#define     BIT2                                0x04
-#define     BIT3                                0x08
-#define     BIT4                                0x10
-#define     BIT5                                0x20
-#define     BIT6                                0x40
-#define     BIT7                                0x80
+#define UART1_TX_DMA_CH_MASK                        (1 << (UART1_TX_DMA_CH + 1))
+#define UART1_RX_DMA_CH_MASK                        (1 << (UART1_RX_DMA_CH + 1))
+#define RF_DMA_CH_MASK                              (1 << (RF_DMA_CH + 1))
 
-// 32MHz system clock baud rate configure
-#define     BAUD_2400                           (59 << 8 | 6)
-#define     BAUD_4800                           (59 << 8 | 7)
-#define     BAUD_9600                           (59 << 8 | 8)
-#define     BAUD_14400                          (216 << 8 | 8)
-#define     BAUD_19200                          (59 << 8 | 9)
-#define     BAUD_28800                          (216 << 8 | 9)
-#define     BAUD_38400                          (59 << 8 | 10)
-#define     BAUD_57600                          (216 << 8 | 10)
-#define     BAUD_76800                          (59 << 8 | 11)
-#define     BAUD_115200                         (216 << 8 | 11)
-#define     BAUD_230400                         (216 << 8 | 12)
-#define     BAUD_921600                         (216 << 8 | 14)
-#define     BAUD_MAX_2000000                    (0 << 8 | 16)
-#define     BAUD_SPI_MAX_4000000                (0 << 8 | 17)
-#define     BAUD_SPITXONLY_MAX_16000000         (0 << 8 | 19)
+/**
+ * @brief system config, about the dma, uart config
+ */
+void sys_config(void);
 
-#define     NULL_PTR                            0
+// enable the system interrupt
+void sys_int_config(void);
 
-#define     MAIN_FSOC                           32000000U
+// about the uart1 config, include the dma config
+void uart1_config(void);
 
-// all interrupts enable or disable 
-#define     INT_EN()                            (EA = 1)
-#define     INT_DISEN()                         (EA = 0)
+// uart1_dma transmit
+void uart1_dma_transmit(uint8_t *txdata, uint16_t len);
 
-// RF CORE error interrupt (INT 0)
-#define     RF_ERR_INT_EN()                     (RFERRIE = 1)
-#define     RF_ERR_INT_DISEN()                  (RFERRIE = 0)
+// using the last config, rearm the dma transmit
+void uart1_dma_trig(uint8_t *txdata, uint16_t len);
 
-// USART0_RX Interrupt (INT 2)
-#define     USART0_INT_EN()                     (URX0IE = 1)
-#define     USART0_INT_DISEN()                  (URX0IE = 0)
-
-// UART1_RX Interrupt (INT 3)
-#define     UART1_RX_INI_EN()                   (URX1IE = 1)
-#define     UART1_RX_INT_DISEN()                (URX1IE = 0)
-
-// USART0_TX Interrupt (INT 7)
-#define     USART0_TX_INT_EN()                  (IEN2 |= IEN2_UTX0IE)
-#define     USART0_TX_INT_DISEN()               (IEN2 &= ~IEN2_UTX0IE)
-
-#define     P0_INT_EN()                         (P0IE = 1)
-#define     P0_INT_DISEN()                      (P0IE = 0)
-
-// UART1_TX Interrupt (INT 14)
-#define     UART1_TX_INT_EN()                   (IEN2 |= IEN2_UTX1IE)
-#define     UART1_TX_INT_DISEN()                (IEN2 &= ~IEN2_UTX1IE)
-
-// RF Interrupt (INT 16)
-#define     RF_INT_DISEN()                      (IEN2 &= ~IEN2_RFIE)
-#define     RF_INT_EN()                         (IEN2 |= IEN2_RFIE)
-#define     RF_INT_FLAG_CLEAR()                 (S1CON = 0X00)
-
-// init the system clock and other peripherals
-void sys_init(void);
-
-void sys_set_clock_32mhz(void);
-
-#endif // 
+// uart1 rx isr funcation
+void uart1_rx_isr(void) __interrupt(URX1_VECTOR) __using(URX1_VECTOR);
+#endif

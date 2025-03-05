@@ -8,6 +8,7 @@
                 "/usr/share/sdcc/include/mcs51/",
                 "/usr/share/sdcc/include/**",
                 "${workspaceFolder}/../common/include/"
+                // "${workspaceFolder}/../../.build/**"
             ],
             "defines": [
                     // "__SDCC",

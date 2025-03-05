@@ -3,4 +3,6 @@ config COMMON_CRC_ENABLE
     default n
     help
       Enable CRC checksumming of the common block.
-    
+config COMMON_PROTO_ENABLE
+	bool "uisng the common protocol or not"
+	default n

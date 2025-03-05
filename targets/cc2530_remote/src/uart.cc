@@ -27,7 +27,8 @@ void uart1_dma_config(void){
     uart1_tx_dma_desc->DESTADDRL = (uint16_t)(&X_U1DBUF);
     
     // Use fixed length DMA transfer count;
-    uart1_tx_dma_desc->VLEN = DMA_VLEN_1_P_VALOFFIRST;
+    // uart1_tx_dma_desc->VLEN = DMA_VLEN_1_P_VALOFFIRST;
+    uart1_tx_dma_desc->VLEN = DMA_VLEN_USE_LEN;
 
     // Transfer a single word after each DMA trigger;
     uart1_tx_dma_desc->WORDSIZE = DMA_WORDSIZE_BYTE;

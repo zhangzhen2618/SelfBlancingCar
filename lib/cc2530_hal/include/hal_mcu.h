@@ -13,6 +13,7 @@
 */
 #include "hal_defs.h"
 
+#define     HAL_MAIN_FSOC                           32000000U
 /***********************************************************************************
  * CONSTANTS AND DEFINES
  */

@@ -43,7 +43,7 @@ DMA_DESC* dma_get_free_channel(uint8_t *dma_channel){
     }
 
     if (i == DMA_CHANNEL_NUM){
-        return NULL_PTR;
+        return 0;
     }else{
         *dma_channel = 1 << i;
         dma_channel_used |= *dma_channel;

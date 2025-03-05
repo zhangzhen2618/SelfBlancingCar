@@ -2,11 +2,70 @@ config USE_CC2530_HAL
     bool "Use the CC2530 HAL for the CC2530 platform"
     default y
     help
-      Use the CC2530_HAL lib for the TI CC2530.
+      	Use the CC2530_HAL lib for the TI CC2530.
     
-
 config UART_ENABLE
     bool "Enable UART"
     default n
     help
-      Enable UART for the CC2530.
+      	Enable UART for the CC2530.
+
+config DMA_ENABE
+    bool "Enable DMA"
+    default n
+    help
+      	Enable DMA for the CC2530.
+
+config SPI_ENABLE
+    bool "Enable SPI"
+    default n
+    help
+      	Enable SPI for the CC2530.
+
+config I2C_ENABLE
+    bool "Enable I2C"
+    default n
+    help
+      	Enable I2C for the CC2530.
+
+config TIMER_ENABLE
+    bool "Enable TIMER"
+    default n
+    help
+      	Enable TIMER for the CC2530.
+
+config ADC_ENABLE
+    bool "Enable ADC"
+    default n
+    help
+      	Enable ADC for the CC2530.
+
+config WATCHDOG_ENABLE
+    bool "Enable WATCHDOG"
+    default n
+    help
+      	Enable WATCHDOG for the CC2530.
+
+config FLASH_ENABLE
+    bool "Enable FLASH"
+    default n
+    help
+      	Enable FLASH for the CC2530.
+
+config AES_ENABLE
+    bool "Enable AES"
+    default n
+    help
+      		Enable AES for the CC2530.
+
+config RANDOM_ENABLE
+    bool "Enable RANDOM"
+    default n
+    help
+      	Enable RANDOM for the CC2530.
+
+config CC2530_RF_ENABLE
+    bool "Enable CC2530_RF"
+    default n
+    help
+      	Enable CC2530_RF for the CC2530.

@@ -78,6 +78,7 @@
  * These macros define the addresses of the extended special function registers
  * for the CC2530 microcontroller.
  */
+// Here main for using DMA for UART0 and UART1
 SFRX(X_U0DBUF, 0X70C1); ///< Extended SFR for UART0 data buffer
 SFRX(X_U1DBUF, 0X70F9); ///< Extended SFR for UART1 data buffer
 
@@ -95,6 +96,8 @@ SFRX(X_U1DBUF, 0X70F9); ///< Extended SFR for UART1 data buffer
 #define     BIT6                                0x40 ///< Bit mask for bit 6
 #define     BIT7                                0x80 ///< Bit mask for bit 7
 
+typedef void (*ISR_FUNC_PTR)(void);
+typedef void (*VFPTR)(void);
 /**
  * @brief Macro for creating a single statement block.
  * 

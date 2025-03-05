@@ -10,9 +10,9 @@
                     
                 ],
             "intelliSenseMode": "gcc-arm",
-            // "compilerPath": "/usr/bin/sdcc",
-            "cStandard": "c23",
-            "cppStandard": "c++23"
+            "compilerPath": "/usr/bin/sdcc",
+            "cStandard": "c11",
+            "cppStandard": "c++11"
             // "configurationProvider": "ms-vscode.makefile-tools"
         }
     ],
