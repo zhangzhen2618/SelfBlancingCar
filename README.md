@@ -7,3 +7,5 @@
  commit 2
 test tag added
 test tag commit 2
+
+test branch commit 0
