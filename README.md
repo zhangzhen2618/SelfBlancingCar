@@ -9,3 +9,5 @@ test tag added
 test tag commit 2
 
 test branch commit 0
+
+test branch jcommit 1
