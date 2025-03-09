@@ -46,16 +46,20 @@ int main(){
 
     uart1_dma_transmit(tx, sizeof(tx));
 	while(1){	
-        tx[tx_len  - 3] = count % 10 + '0';
-        tx[tx_len  - 4] = count / 10 % 10 + '0';
-        tx[tx_len  - 5] = count / 100 + '0';
-        count++;
-        // uart1_dma_trig(tx, sizeof(tx));
+        if ((DMAARM & UART1_TX_DMA_CH_MASK) == 0){
+            // hal_dma_clear_int_flag(UART1_TX_DMA_CH_MASK);
+            tx[tx_len  - 3] = count % 10 + '0';
+            tx[tx_len  - 4] = (count / 10) % 10 + '0';
+            tx[tx_len  - 5] = count / 100 + '0';
+            count++;
+            uart1_dma_trig();
+            // halMcuWaitUs(55);
+        }
+        // hal_uart1_transmit(tx, sizeof(tx));
         // DMAARM |= UART1_TX_DMA_CH_MASK;
     
-        // hal_dma_soft_trig(UART1_TX_DMA_CH_MASK);
 
-        halMcuWaitMs(500);
+        // halMcuWaitMs(500);
         // hal_uart1_receive(rx, 1);
         // hal_uart1_transmit(rx, 1);
         // halMcuWaitMs(1000);

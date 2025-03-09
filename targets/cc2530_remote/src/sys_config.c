@@ -20,14 +20,17 @@ void sys_config(void){
 
 void sys_int_config(void){
 
-    UART1_RX_INI_EN();
+    hal_usart1_rx_int_enable();
 
-    INT_EN();    
+    // dma interrupt enabel
+    hal_DMA_int_enable();
+
+    // INT_EN();    
 }
 
 void uart1_config(void){
 
-    hal_uart1_config(BAUD_MAX_2000000, UART1_8N1, UART1_PIN_ALT1);
+    hal_uart1_config(BAUD_4800, UART1_8N1, UART1_PIN_ALT1);
 
     uart1_tx_dma_desc = DMA_CH_CONFIG + UART1_TX_DMA_CH;
 
@@ -48,6 +51,7 @@ void uart1_config(void){
     uart1_tx_dma_desc->DESTINC = DMA_DESTINC_0;
 
     uart1_tx_dma_desc->IRQMASK = DMA_IRQMASK_ENABLE;
+    // uart1_tx_dma_desc->IRQMASK = DMA_IRQMASK_DISABLE;
     uart1_tx_dma_desc->M8 = DMA_M8_USE_8_BITS;
     uart1_tx_dma_desc->PRIORITY = DMA_PRI_LOW;
 }
@@ -67,14 +71,8 @@ void uart1_dma_transmit(uint8_t *txdata, uint16_t len){
     hal_dma_soft_trig(UART1_TX_DMA_CH_MASK);
 }
 
-void uart1_dma_trig(uint8_t *txdata, uint16_t len){
-    // uart1_tx_dma_desc->SRCADDRH = (uint16_t)(txdata) >> 8;
-    // uart1_tx_dma_desc->SRCADDRL = (uint16_t)(txdata) & 0x00ff;
-
-    // uart1_tx_dma_desc->LENH = (len >> 8) & 0xff;
-    // uart1_tx_dma_desc->LENL = (len) & 0xff;
-
-    // DMAARM &= ~UART1_TX_DMA_CH_MASK;
+void uart1_dma_trig(){
+    
     DMAARM |= UART1_TX_DMA_CH_MASK;
     
     hal_dma_soft_trig(UART1_TX_DMA_CH_MASK);
@@ -96,4 +94,15 @@ void uart1_rx_isr(void) __interrupt(URX1_VECTOR) __using(URX1_VECTOR){
         
         hal_dma_soft_trig(UART1_TX_DMA_CH_MASK);
     }
+}
+
+void dma_isr(void) __interrupt(DMA_VECTOR) __using(DMA_VECTOR){
+    
+    hal_DMA_int_flag_clear(); // Clear the int flag
+    if (DMAIRQ & UART1_TX_DMA_CH_MASK){
+        uart1_dma_trig();      
+    }
+
+    DMAIRQ = 0;
+
 }

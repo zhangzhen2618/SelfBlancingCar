@@ -3,6 +3,9 @@
 
 #include "stdint.h"
 
+/**
+ * protocol |HEADER|PKG_LEN|PKG_NUM|PKG_ID|***PKG*****|CRC->2BYTES|
+ */
 #define PROTO_SYN_HEADER                                    0X22
 
 #define PROTO_BEGAIN(msg_name, id)                          static unsigned char PROTO_ ##msg_name ##_ID = id;\
@@ -10,7 +13,8 @@
 
 #define PROTO_END(msg_name)                                 PROTO_##msg_name;\
                                                             static const unsigned char PROTO_##msg_name##_LEN \
-                                                                = sizeof(PROTO_##msg_name)                                                       
+                                                                = sizeof(PROTO_##msg_name)
+                                                                
 // define the heart
 PROTO_BEGAIN(HEART, 0x00){
     uint8_t time;

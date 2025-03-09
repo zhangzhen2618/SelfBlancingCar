@@ -31,8 +31,11 @@ void uart1_config(void);
 void uart1_dma_transmit(uint8_t *txdata, uint16_t len);
 
 // using the last config, rearm the dma transmit
-void uart1_dma_trig(uint8_t *txdata, uint16_t len);
+void uart1_dma_trig(void);
 
 // uart1 rx isr funcation
 void uart1_rx_isr(void) __interrupt(URX1_VECTOR) __using(URX1_VECTOR);
+
+// dma isr funcation
+void dma_isr(void) __interrupt(DMA_VECTOR) __using(DMA_VECTOR);
 #endif

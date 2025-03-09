@@ -26,6 +26,10 @@
 
 #define     UART1_PIN_ALT1                      0
 #define     UART1_PIN_ALT2                      1
+
+#define     hal_uart1_tx_status()               (U1CSR & U1CSR_TX_BYTE)
+#define     hal_uart1_rx_status()               (U1CSR & U1CSR_RX_BYTE)
+#define     hal_uart1_status()                  (U1CSR & U1CSR_ACTIVE)
 /**
  * 
  * @brief uart1 config

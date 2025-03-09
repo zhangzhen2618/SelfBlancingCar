@@ -3,35 +3,53 @@
 #include "hal_defs.h"
 
 // all interrupts enable or disable 
-#define     INT_EN()                            (EA = 1)
-#define     INT_DISEN()                         (EA = 0)
+#define     hal_int_enable()                            (EA = 1)
+#define     hal_int_disable()                           (EA = 0)
 
 // RF CORE error interrupt (INT 0)
-#define     RF_ERR_INT_EN()                     (RFERRIE = 1)
-#define     RF_ERR_INT_DISEN()                  (RFERRIE = 0)
+#define     hal_RF_err_int_enable()                     (RFERRIE = 1)
+#define     hal_RF_err_int_disable()                    (RFERRIE = 0)
+#define     hal_RF_err_int_flag_check()                 (RFERRIF)
 
 // USART0_RX Interrupt (INT 2)
-#define     USART0_INT_EN()                     (URX0IE = 1)
-#define     USART0_INT_DISEN()                  (URX0IE = 0)
+#define     hal_usart0_rx_int_enable()                  (URX0IE = 1)
+#define     hal_usart0_rx_int_disable()                 (URX0IE = 0)
+#define     hal_usart0_rx_int_flag_check()              (URX0IF)
 
-// UART1_RX Interrupt (INT 3)
-#define     UART1_RX_INI_EN()                   (URX1IE = 1)
-#define     UART1_RX_INT_DISEN()                (URX1IE = 0)
+// USART1_RX Interrupt (INT 3)
+#define     hal_usart1_rx_int_enable()                  (URX1IE = 1)
+#define     hal_usart1_rx_int_disable()                 (URX1IE = 0)
+#define     hal_usart1_rx_int_flag_check()              (URX1IF)
 
 // USART0_TX Interrupt (INT 7)
-#define     USART0_TX_INT_EN()                  (IEN2 |= IEN2_UTX0IE)
-#define     USART0_TX_INT_DISEN()               (IEN2 &= ~IEN2_UTX0IE)
+#define     hal_usart0_tx_int_enable()                  (IEN2 |= IEN2_UTX0IE)
+#define     hal_usart0_tx_int_disable()                 (IEN2 &= ~IEN2_UTX0IE)
+#define     hal_usart0_tx_int_flag_check()              (UTX0IF)
+#define     hal_usart0_tx_int_flag_clear()              (UTX0IF = 0)
 
-#define     P0_INT_EN()                         (P0IE = 1)
-#define     P0_INT_DISEN()                      (P0IE = 0)
+// USART0_RX Interrupt (INT 8)
+
+// DMA transimit complete (INT 8)
+#define     hal_DMA_int_enable()                        (DMAIE = 1)
+#define     hal_DMA_int_disable()                       (DMAIE = 0)
+#define     hal_DMA_int_flag_check()                    (DMAIF)
+#define     hal_DMA_int_flag_clear()                    (DMAIF = 0)
+
+#define     hal_P0_int_enable()                         (P0IE = 1)
+#define     hal_P0_int_disable()                        (P0IE = 0)
+#define     hal_P0_int_flag_check()                     (P0IF)
+#define     hal_P0_int_flag_clear()                     (P0IF = 0)
 
 // UART1_TX Interrupt (INT 14)
-#define     UART1_TX_INT_EN()                   (IEN2 |= IEN2_UTX1IE)
-#define     UART1_TX_INT_DISEN()                (IEN2 &= ~IEN2_UTX1IE)
+#define     hal_usart1_tx_int_enable()                   (IEN2 |= IEN2_UTX1IE)
+#define     hal_usart1_tx_int_disable()                  (IEN2 &= ~IEN2_UTX1IE)
+#define     hal_usart1_tx_int_flag_check()               (UTX1IF)
+#define     hal_usart1_tx_int_flag_clear()               (UTX1IF = 0)
 
 // RF Interrupt (INT 16)
-#define     RF_INT_DISEN()                      (IEN2 &= ~IEN2_RFIE)
-#define     RF_INT_EN()                         (IEN2 |= IEN2_RFIE)
-#define     RF_INT_FLAG_CLEAR()                 (S1CON = 0X00)
+#define     hal_RF_int_disable()                        (IEN2 &= ~IEN2_RFIE)
+#define     hal_RF_int_enable()                         (IEN2 |= IEN2_RFIE)
+#define     hal_RF_int_flag_check()                     (S1CON)
+#define     hal_RF_int_flag_clear()                     (S1CON = 0X00)
 
 #endif // !__HAL_INT_H__ 

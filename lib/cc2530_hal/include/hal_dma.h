@@ -53,20 +53,22 @@
 #define DMA_CHANNEL_3_mask             	        0x08
 #define DMA_CHANNEL_4_mask             	        0x10
 
-
 // DMA arm channel_num must be one of the above DMA_CHANNEL_x
 #define hal_dma_arm(ch_mask)       	            (DMA_ARM |= (ch_mask)) // DMA arm
 #define hal_dma_disarm(ch_mask)   	            (DMA_ARM &= ~(ch_mask)) // DMA disarm
+// DMA ready is ready or not, 0 : means ready, 1: means not ready
+#define hal_dma_ready(ch_mask)   	            (DMA_ARM & (ch_mask))
+
+// DMA interrupt flag 
+#define hal_dma_check_int_flag(ch_mask)         (DMAIRQ & (ch_mask))
+// DMA clear interrupt flag
+#define hal_dma_clear_int_flag(ch_mask)         (DMAIRQ &= ~(ch_mask))
+// Clear all interrupt flag
+#define hal_dma_clear_all_int_flag()            (DMAIRQ = 0)
 
 // DMA softwore trigger, channel_num must be one of the above DMA_CHANNEL_x
 #define hal_dma_soft_trig(ch_mask)              (DMAREQ |= (ch_mask)) // DMA software trigger
 
-//DMA Interrupt flag
-#define hal_dma_check_int_flag(ch_mask)         (DMAIRQ & (ch_mask)) 
-//DMA clear interrupt flag
-#define hal_dma_clear_int_flag(ch_mask)         (DMAIRQ & (~ch_mask)) 
-//Clear all interrupt flag
-#define hal_dma_clear_all_int_flag()            (DMAIRQ = 0) 
 
 #define hal_dma_cfg_0(cfg_adr)                  (DMA0CFGH = (uint16_t)(cfg_adr) >> 8, DMA0CFGL = (uint16_t)(cfg_adr))
 #define hal_dma_cfg_1234(cfg_adr)               (DMA1CFGH = (uint16_t)(cfg_adr) >> 8, DMA1CFGL = (uint16_t)(cfg_adr))
