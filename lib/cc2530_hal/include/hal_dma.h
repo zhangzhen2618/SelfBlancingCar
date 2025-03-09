@@ -56,7 +56,7 @@
 // DMA arm channel_num must be one of the above DMA_CHANNEL_x
 #define hal_dma_arm(ch_mask)       	            (DMA_ARM |= (ch_mask)) // DMA arm
 #define hal_dma_disarm(ch_mask)   	            (DMA_ARM &= ~(ch_mask)) // DMA disarm
-// DMA ready is ready or not, 0 : means ready, 1: means not ready
+// DMA ready is ready or not for the next transmit, 0 : means ready, 1: means not ready
 #define hal_dma_ready(ch_mask)   	            (DMA_ARM & (ch_mask))
 
 // DMA interrupt flag 
