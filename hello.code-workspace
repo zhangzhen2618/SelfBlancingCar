@@ -61,7 +61,13 @@
 			"system_error": "cpp",
 			"vector": "cpp",
 			"string": "cpp",
-			"iostream": "cpp"
+			"iostream": "cpp",
+			"memory": "cpp",
+			"sstream": "cpp",
+			"unordered_map": "cpp",
+			"compiler.h": "c",
+			"stc8h.h": "c",
+			"hal_rf.h": "c"
 		},
 		"explorer.sortOrder": "type",
 		"explorer.fileNesting.enabled": true,

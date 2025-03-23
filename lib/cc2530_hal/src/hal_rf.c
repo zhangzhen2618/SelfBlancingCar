@@ -1,9 +1,9 @@
-#include "rf.h"
+#include "hal_rf.h"
 
 // rf tx buffer
-static RF_RECEIVE_CB rf_pkg_done_cb = NULL_PTR;
+static RF_RECEIVE_CB rf_pkg_done_cb = NULL;
 
-void RF_init(void){
+void hal_RF_init(void){
 
     // now using the default the frame fliter
 
@@ -24,23 +24,23 @@ void RF_init(void){
 } 
 
 // rx pkt done callback funcation
-void RF_set_pkg_done_isr_fun(RF_RECEIVE_CB rx_cb){
+void hal_RF_set_pkg_done_isr_fun(RF_RECEIVE_CB rx_cb){
 
-    if (rx_cb != NULL_PTR){
+    if (rx_cb != NULL){
         rf_pkg_done_cb = rx_cb;
     }
 }
 
 // write the data to the rf tx buff
-void RF_transmit(MPDU_HEADER *mpdu_header_ptr, uint8_t *tx_data, uint8_t data_len){
+void hal_RF_transmit(MPDU_HEADER *mpdu_header_ptr, uint8_t *tx_data, uint8_t data_len){
 
-    RF_ISTXON();
+    HAL_RF_CMD_ISTXON();
     
-    mpdu_header_ptr->len = MPDU_HEADER_LEN + MPDU_FCS_LEN + data_len;
+    mpdu_header_ptr->len = HAL_RF_MPDU_HEADER_LEN + HAL_RF_MPDU_FCS_LEN + data_len;
     uint8_t *mpdu_h_ptr = (uint8_t *)mpdu_header_ptr;
 
     // clear rf tx data buffer
-    RF_SFLUSHTX();
+    HAL_RF_CMD_SFLUSHTX();
     
     for(uint8_t i = 0; i < sizeof(MPDU_HEADER); i++){
         RFD = *(mpdu_h_ptr + i);
@@ -52,18 +52,19 @@ void RF_transmit(MPDU_HEADER *mpdu_header_ptr, uint8_t *tx_data, uint8_t data_le
 }
 
 // RF core error interrupter funcation
-void rf_error_isr(void) __interrupt(RFERR_VECTOR){
+void hal_RF_error_isr(void) __interrupt(RFERR_VECTOR){
     RFERRF = 0;
-    RF_ISRXON();
+    HAL_RF_CMD_ISRXON();
 }
 
 
 // RF general interrupt funcation
-void rf_isr(void) __interrupt(RF_VECTOR){
-    RF_INT_FLAG_CLEAR();
+void hal_RF_isr(void) __interrupt(RF_VECTOR){
+    
+    hal_RF_int_flag_clear();
 
-    if (RF_IRQF0_RXPKTDONE_GET()){
-        static uint8_t rx_buffer[MPDU_MAX_PKG_LEN];
+    if (HAL_RF_INT_FLG_RXPKTDONE_CHECK()){
+        static uint8_t rx_buffer[HAL_RF_MPDU_MAX_PKG_LEN];
         static uint8_t data_len;
 
         data_len = RXFIFOCNT;
@@ -72,13 +73,13 @@ void rf_isr(void) __interrupt(RF_VECTOR){
             rx_buffer[i] = RFD;
         }
 
-        RF_SFLUSHRX();
+        HAL_RF_CMD_SFLUSHRX();
         
-        rf_pkg_done_cb(rx_buffer, MPDU_MAX_PKG_LEN);
+        rf_pkg_done_cb(rx_buffer, HAL_RF_MPDU_MAX_PKG_LEN);
     }
 
-    if (RF_IRQF1_TXDONE_GET()){
-        RF_ISRXON();
+    if (HAL_RF_INT_FLG_TXDONE_CHECK()){
+        HAL_RF_CMD_ISRXON();
     }
 
     // clear the RFIRQF

@@ -1,6 +1,6 @@
 #include "CC2530_LCD.h"
 #include "buzzer.h"
-#include "rf.h"
+#include "hal_rf.h"
 #include <stdio.h>
 #include <string.h>
 #include "spi.h"
@@ -33,7 +33,7 @@ int main(){
     
     LCD_Init(spi1_write_byte);
 
-    RF_init();
+    hal_RF_init();
 
     sys_set_clock_32mhz();
 
@@ -43,7 +43,7 @@ int main(){
     INT_EN();
 
     static char str[] = "Hello world!!!\n";
-    static uint8_t tx_buf[MPDU_MAX_PKG_LEN] = {0};
+    static uint8_t tx_buf[HAL_RF_MPDU_MAX_PKG_LEN] = {0};
     static uint8_t tx_count = 0;
 
     // Packet overhead ((frame control field, sequence number, PAN ID,
@@ -52,11 +52,11 @@ int main(){
     
     static MPDU_HEADER mpdu_header;
     
-    RF_SET_PANID(RF_TE_DEFAULT_PANDID);
-    RF_SET_SHORTADDR(RF_TE_DEFAULT_SHORTADDR);
+    HAL_RF_SET_PANID(RF_TE_DEFAULT_PANDID);
+    HAL_RF_SET_SHORTADDR(RF_TE_DEFAULT_SHORTADDR);
 
     mpdu_header.seq_num = 0;
-    mpdu_header.fcf = FC_16BIT_DATA_ACK_REQ;
+    mpdu_header.fcf = HAL_RF_FC_16BIT_DATA_ACK_REQ;
     mpdu_header.dest_pan = RF_PC_DEFAULT_PANDID;
     mpdu_header.dest_addr = RF_PC_DEFAULT_SHORTADDR;
     mpdu_header.src_pan = RF_TE_DEFAULT_PANDID;
@@ -96,16 +96,16 @@ int main(){
                 while (!(U0CSR & U0CSR_RX_BYTE));
                 // U0CSR &= ~U0CSR_RX_BYTE;
                 tx_buf[tx_count] = U0DBUF;
-            }while((++tx_count) != tx_buf[2] && tx_count < MPDU_MAX_PKG_LEN);
+            }while((++tx_count) != tx_buf[2] && tx_count < HAL_RF_MPDU_MAX_PKG_LEN);
             
 
             mpdu_header.seq_num++;
 
-            RF_transmit(&mpdu_header, tx_buf, tx_buf[2] + 3);
+            hal_RF_transmit(&mpdu_header, tx_buf, tx_buf[2] + 3);
             
-            while(!(RF_IRQF1_TXDONE_GET()));
+            while(!(HAL_RF_INT_FLG_TXDONE_CHECK()));
 
-            RF_IRQF1_TXDONE_CLEAR();
+            HAL_RF_INT_FLG_TXDONE_CLEAR();
             tx_buf[0] = 0;
             // break;
         }

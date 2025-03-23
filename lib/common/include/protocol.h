@@ -17,7 +17,9 @@
                                                                 
 // define the heart
 PROTO_BEGAIN(HEART, 0x00){
-    uint8_t time;
+    uint32_t local_chip_id;
+    uint32_t remote_chip_id;
+    uint32_t control_chip_id;
 }PROTO_END(HEART);
 
 #endif // !__PROTOCOL_H__

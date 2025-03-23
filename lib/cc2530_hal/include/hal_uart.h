@@ -17,8 +17,6 @@
 #define     BAUD_230400                         (216 << 8 | 12)
 #define     BAUD_921600                         (216 << 8 | 14)
 #define     BAUD_MAX_2000000                    (0 << 8 | 16)
-#define     BAUD_SPI_MAX_4000000                (0 << 8 | 17)
-#define     BAUD_SPITXONLY_MAX_16000000         (0 << 8 | 19)
 
 // This the normal uart config, 8bit, no parity, 1 stop bit, no flow control
 // the more setting read the U1UCR register, in datasheet

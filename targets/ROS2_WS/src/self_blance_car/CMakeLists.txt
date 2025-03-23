@@ -23,18 +23,18 @@ include_directories(
   	${console_bridge_INCLUDE_DIRS}
 )
 set_source_files_properties(
-  ${PROJECT_SOURCE_DIR}/../../../COMMON/src/crc.c 
+  ${PROJECT_SOURCE_DIR}/../../../../lib/common/src/crc.c 
   PROPERTIES LANGUAGE CXX )
   
 add_executable(serial_node
-    ${PROJECT_SOURCE_DIR}/../../../COMMON/src/crc.c
+    ${PROJECT_SOURCE_DIR}/../../../../lib/common/src/crc.c
     src/serial.cpp
     src/self_blance_car_node.cpp
     src/self_blance_car_node_main.cpp)
 
 target_include_directories(serial_node
     PRIVATE 
-        ${PROJECT_SOURCE_DIR}/../../../COMMON/include
+        ${PROJECT_SOURCE_DIR}/../../../../lib/common/include
 )
 ament_target_dependencies(
   serial_node 

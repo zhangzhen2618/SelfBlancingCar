@@ -3,12 +3,11 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/include/",
+                "${workspaceFolder}/include",
                 "/usr/share/sdcc/include/",
                 "/usr/share/sdcc/include/mcs51/",
                 "/usr/share/sdcc/include/**",
                 "${workspaceFolder}/../common/include/"
-                // "${workspaceFolder}/../../.build/**"
             ],
             "defines": [
                     // "__SDCC",
@@ -24,6 +23,7 @@
                     "__bdata=",
                     "__xdata=",
                     "__code=",
+                    "__weak=",
                     "bit=char",
                     "sbit=char",
                     "sfr=char",

@@ -16,6 +16,7 @@
 #define UART1_RX_DMA_CH_MASK                        (1 << (UART1_RX_DMA_CH + 1))
 #define RF_DMA_CH_MASK                              (1 << (RF_DMA_CH + 1))
 
+
 /**
  * @brief system config, about the dma, uart config
  */
@@ -25,7 +26,10 @@ void sys_config(void);
 void sys_int_config(void);
 
 // about the uart1 config, include the dma config
-void uart1_config(void);
+void uart1_tx_dma_config(void);
+
+// about the uart1 rx dma transmit
+void uart1_rx_dma_config(void);
 
 // uart1_dma transmit
 void uart1_dma_transmit(uint8_t *txdata, uint16_t len);

@@ -22,49 +22,49 @@ config SPI_ENABLE
     help
       	Enable SPI for the CC2530.
 
-config I2C_ENABLE
-    bool "Enable I2C"
-    default n
-    help
-      	Enable I2C for the CC2530.
+# config I2C_ENABLE
+#     bool "Enable I2C"
+#     default n
+#     help
+#       	Enable I2C for the CC2530.
 
-config TIMER_ENABLE
-    bool "Enable TIMER"
-    default n
-    help
-      	Enable TIMER for the CC2530.
+# config TIMER_ENABLE
+#     bool "Enable TIMER"
+#     default n
+#     help
+#       	Enable TIMER for the CC2530.
 
-config ADC_ENABLE
-    bool "Enable ADC"
-    default n
-    help
-      	Enable ADC for the CC2530.
+# config ADC_ENABLE
+#     bool "Enable ADC"
+#     default n
+#     help
+#       	Enable ADC for the CC2530.
 
-config WATCHDOG_ENABLE
-    bool "Enable WATCHDOG"
-    default n
-    help
-      	Enable WATCHDOG for the CC2530.
+# config WATCHDOG_ENABLE
+#     bool "Enable WATCHDOG"
+#     default n
+#     help
+#       	Enable WATCHDOG for the CC2530.
 
-config FLASH_ENABLE
-    bool "Enable FLASH"
-    default n
-    help
-      	Enable FLASH for the CC2530.
+# config FLASH_ENABLE
+#     bool "Enable FLASH"
+#     default n
+#     help
+#       	Enable FLASH for the CC2530.
 
-config AES_ENABLE
-    bool "Enable AES"
-    default n
-    help
-      		Enable AES for the CC2530.
+# config AES_ENABLE
+#     bool "Enable AES"
+#     default n
+#     help
+#       		Enable AES for the CC2530.
 
-config RANDOM_ENABLE
-    bool "Enable RANDOM"
-    default n
-    help
-      	Enable RANDOM for the CC2530.
+# config RANDOM_ENABLE
+#     bool "Enable RANDOM"
+#     default n
+#     help
+#       	Enable RANDOM for the CC2530.
 
-config CC2530_RF_ENABLE
+config RF_ENABLE
     bool "Enable CC2530_RF"
     default n
     help
