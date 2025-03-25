@@ -6,6 +6,7 @@
 #include "spi.h"
 
 #include "crc.h"
+#include "protocol.h"
 
 // These values will give a baud rate of approx. 1.002930 Mbps for 26 MHz clock
 #define SPI_BAUD_M  60
@@ -45,6 +46,16 @@ int main(){
     static char str[] = "Hello world!!!\n";
     static uint8_t tx_buf[HAL_RF_MPDU_MAX_PKG_LEN] = {0};
     static uint8_t tx_count = 0;
+    tx_buf[0] = 0x00; // pkg num
+    tx_buf[1] = PROTO_HEART_ID;
+    static PROTO_HEART *heart = (PROTO_HEART *)(tx_buf + 2);
+    heart->local_chip_id = CHVER;
+    heart->local_chip_id <<= 8;
+    heart->local_chip_id |= CHIPID;
+    heart->local_chip_id <<= 8;
+    heart->local_chip_id |= CHIPINFO0;
+    heart->local_chip_id <<= 8;
+    heart->local_chip_id |= CHIPINFO1;
 
     // Packet overhead ((frame control field, sequence number, PAN ID,
     // destination and source) + (footer))
@@ -71,45 +82,46 @@ int main(){
     // buzzer_start();
 	while(1){	
 
-        while (1){
-            tx_count = 1;
+        // while (1){
+        //     tx_count = 1;
             
-            U0CSR &= ~U0CSR_RX_BYTE;
-            while (!(U0CSR & U0CSR_RX_BYTE));
-            // U0CSR &= ~U0CSR_RX_BYTE;
-            tx_buf[tx_count++] = U0DBUF;
+        //     U0CSR &= ~U0CSR_RX_BYTE;
+        //     while (!(U0CSR & U0CSR_RX_BYTE));
+        //     // U0CSR &= ~U0CSR_RX_BYTE;
+        //     tx_buf[tx_count++] = U0DBUF;
             
-            if (tx_buf[1] != 0xAA){
-                tx_buf[0]++;
-                continue;
-            }
+        //     if (tx_buf[1] != 0xAA){
+        //         tx_buf[0]++;
+        //         continue;
+        //     }
 
             
-            U0CSR &= ~U0CSR_RX_BYTE;
-            while (!(U0CSR & U0CSR_RX_BYTE));
-            // U0CSR &= ~U0CSR_RX_BYTE;
+        //     U0CSR &= ~U0CSR_RX_BYTE;
+        //     while (!(U0CSR & U0CSR_RX_BYTE));
+        //     // U0CSR &= ~U0CSR_RX_BYTE;
 
-            tx_buf[tx_count++] = U0DBUF;
+        //     tx_buf[tx_count++] = U0DBUF;
 
-            do{
-                U0CSR &= ~U0CSR_RX_BYTE;
-                while (!(U0CSR & U0CSR_RX_BYTE));
-                // U0CSR &= ~U0CSR_RX_BYTE;
-                tx_buf[tx_count] = U0DBUF;
-            }while((++tx_count) != tx_buf[2] && tx_count < HAL_RF_MPDU_MAX_PKG_LEN);
+        //     do{
+        //         U0CSR &= ~U0CSR_RX_BYTE;
+        //         while (!(U0CSR & U0CSR_RX_BYTE));
+        //         // U0CSR &= ~U0CSR_RX_BYTE;
+        //         tx_buf[tx_count] = U0DBUF;
+        //     }while((++tx_count) != tx_buf[2] && tx_count < HAL_RF_MPDU_MAX_PKG_LEN);
             
 
-            mpdu_header.seq_num++;
+        //     mpdu_header.seq_num++;
 
-            hal_RF_transmit(&mpdu_header, tx_buf, tx_buf[2] + 3);
+        //     hal_RF_transmit(&mpdu_header, tx_buf, tx_buf[2] + 3);
             
-            while(!(HAL_RF_INT_FLG_TXDONE_CHECK()));
+        //     while(!(HAL_RF_INT_FLG_TXDONE_CHECK()));
 
-            HAL_RF_INT_FLG_TXDONE_CLEAR();
-            tx_buf[0] = 0;
-            // break;
-        }
-        
+        //     HAL_RF_INT_FLG_TXDONE_CLEAR();
+        //     tx_buf[0] = 0;
+        //     // break;
+        // }
+        hal_RF_transmit(&mpdu_header, tx_buf, PROTO_HEART_LEN + 2);
+        tx_buf[0]++;
         // while(!(spi0_rx_dma_pkg_is_finished()));
         // static uint8_t *rx_buf_ptr;
         // rx_buf_ptr = spi0_get_rx_buf();
@@ -122,11 +134,11 @@ int main(){
         // buzzer_set_hz(2000);
         // buzzer_start();
         // buzzer_test(delay_ms);
-        // LCD_Clear(RED);
+        LCD_Clear(RED);
         // delay_ms(1000);
-        // LCD_Clear(GREEN);
+        LCD_Clear(GREEN);
         // delay_ms(1000);	
-        // LCD_Clear(BLUE);
+        LCD_Clear(BLUE);
         // delay_ms(1000);
     }   
 }

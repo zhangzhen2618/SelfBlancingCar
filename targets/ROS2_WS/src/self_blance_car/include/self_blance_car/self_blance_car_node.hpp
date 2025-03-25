@@ -1,10 +1,11 @@
-#pragma once
 #ifndef __SELF_BLANCE_CAR_NODE_HPP__
 #define __SELF_BLANCE_CAR_NODE_HPP__
 
 #include "self_blance_car/serial.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/joy.hpp"
+#include "crc.h"
+#include "protocol.h"
 
 #define     PACKED                  __attribute__((packed)) // Don't use byte align
 
@@ -58,8 +59,7 @@ private:
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_sub_;
 
     // storage the message bytes stream
-    std::array<uint8_t, MSG_BUF_MAX> msg_buf_;
-    size_t msg_buf_ptr_ = 0;
+    std::vector<uint8_t> msg_buf_;
 
     void joy_msg_cb_(const sensor_msgs::msg::Joy::SharedPtr joy_msg_ptr);
 

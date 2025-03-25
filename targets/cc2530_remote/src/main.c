@@ -54,8 +54,15 @@ int main(){
 }
 
 void pkg_rx_done_cb(uint8_t *rx_data, uint8_t len){
-    *(uint16_t*)(rx_data + rx_data[0] + 1) = 
-        crc16_calc(rx_data + 1, rx_data[0], DEFAULT_CRC_START_VALUE);
-    rx_data[0] += 2;
-    uart1_dma_transmit(rx_data, len);
+    MPDU_HEADER *mpdu_ptr = (MPDU_HEADER *)(rx_data);
+    uint8_t *tx_ptr = rx_data + sizeof(MPDU_HEADER) - 1;
+    tx_ptr[0] = mpdu_ptr->len - sizeof(MPDU_HEADER) - 1;
+    *(uint16_t*)(tx_ptr + tx_ptr[0] + 1) = 
+        crc16_calc(tx_ptr + 1, tx_ptr[0], DEFAULT_CRC_START_VALUE);
+    // tx_ptr[0] = 2;
+    // tx_ptr[1] = 0x01;
+    // tx_ptr[2] = 0x02;
+    // tx_ptr[3] = 0x03;
+    // tx_ptr[4] = 0x04;
+    uart1_dma_transmit(tx_ptr);
 }

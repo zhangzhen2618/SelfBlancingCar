@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/../COMMON/include/",
+                "${workspaceFolder}/../../lib/common/include/",
                 "/opt/ros/${ROS_DISTRO}/include/**"
             ],
            

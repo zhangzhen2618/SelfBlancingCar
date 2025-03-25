@@ -19,8 +19,6 @@ void hal_RF_init(void){
     TXFILTCFG = 0x09; // tx filter configuration
 
     FREQCTRL = 0x10; //chanel 2
-
-    
 } 
 
 // rx pkt done callback funcation
@@ -75,7 +73,7 @@ void hal_RF_isr(void) __interrupt(RF_VECTOR){
 
         HAL_RF_CMD_SFLUSHRX();
         
-        rf_pkg_done_cb(rx_buffer, HAL_RF_MPDU_MAX_PKG_LEN);
+        rf_pkg_done_cb(rx_buffer, data_len);
     }
 
     if (HAL_RF_INT_FLG_TXDONE_CHECK()){

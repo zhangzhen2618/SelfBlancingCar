@@ -8,9 +8,9 @@
 #include "protocol.h"
 
 // DMA channel config
-#define UART1_TX_DMA_CH                             DMA_CHANNEL_1
-#define UART1_RX_DMA_CH                             DMA_CHANNEL_2
-#define RF_DMA_CH                                   DMA_CHANNEL_3
+#define UART1_TX_DMA_CH                             HAL_DMA_CHANNEL_1
+#define UART1_RX_DMA_CH                             HAL_DMA_CHANNEL_2
+#define RF_DMA_CH                                   HAL_DMA_CHANNEL_3
 
 #define UART1_TX_DMA_CH_MASK                        (1 << (UART1_TX_DMA_CH + 1))
 #define UART1_RX_DMA_CH_MASK                        (1 << (UART1_RX_DMA_CH + 1))
@@ -32,7 +32,7 @@ void uart1_tx_dma_config(void);
 void uart1_rx_dma_config(void);
 
 // uart1_dma transmit
-void uart1_dma_transmit(uint8_t *txdata, uint16_t len);
+void uart1_dma_transmit(uint8_t *txdata);
 
 // using the last config, rearm the dma transmit
 void uart1_dma_trig(void);

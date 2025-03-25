@@ -8,7 +8,17 @@
  */
 #define PROTO_SYN_HEADER                                    0X22
 
-#define PROTO_BEGAIN(msg_name, id)                          static unsigned char PROTO_ ##msg_name ##_ID = id;\
+// PACKAGE SIZE
+#define PROTO_HEADER_SIZE                                   2
+#define PROTO_CRC_SIZE                                      2
+
+#define PROTO_SYN_INDEX                                     0
+#define PROTO_LEN_INDEX                                     1
+#define PROTO_NUM_INDEX                                     2
+#define PROTO_CMD_INDEX                                     3
+#define PROTO_DATA_INDEX                                    4
+
+#define PROTO_BEGAIN(msg_name, id)                          static const unsigned char PROTO_ ##msg_name ##_ID = id;\
                                                                 typedef struct 
 
 #define PROTO_END(msg_name)                                 PROTO_##msg_name;\

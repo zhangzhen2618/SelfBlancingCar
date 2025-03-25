@@ -131,13 +131,14 @@ void SBCarSerial::do_read(void){
         if (sthis->parse_msg != nullptr){
             sthis->parse_msg(sthis->rx_buf.data(), bytes_transferred);
         }else{
-		    sthis->default_parse_msg(sthis->rx_buf.data(), sthis->rx_buf.size(), bytes_transferred);
+		    sthis->default_parse_msg(sthis->rx_buf.data(), bytes_transferred);
         }
+        sthis->total_bytes += bytes_transferred;
 		sthis->do_read();
     });
 }
 
-void SBCarSerial::default_parse_msg(uint8_t * buf, const size_t bufsize, size_t bytes_received){
+void SBCarSerial::default_parse_msg(uint8_t * buf,  size_t bytes_received){
     static int count = 0;
     std::cout << count++ << ", num, " << bytes_received << " : ";
 	std::cout << std::hex;
@@ -146,18 +147,6 @@ void SBCarSerial::default_parse_msg(uint8_t * buf, const size_t bufsize, size_t 
 	}
 	std::cout << std::dec << std::endl;
 
-    int16_t x = *(int16_t *)(buf + 21);
-    int16_t y = *(int16_t *)(buf + 23);
-    int16_t z = *(int16_t *)(buf + 25);
-
-    x *= 39;
-    y *= 39;
-    z *= 39;
-    std::cout << std::hex << "id = " << (int)buf[20] << std::dec;
-    std::cout << "imu: x = " << x / 1000.0
-            << ", y = " << y / 1000.0
-            << ", z = " << z / 1000.0
-            << std::endl;
 }
 
 void SBCarSerial::do_write(bool check_tx_state){

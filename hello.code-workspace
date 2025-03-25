@@ -67,7 +67,16 @@
 			"unordered_map": "cpp",
 			"compiler.h": "c",
 			"stc8h.h": "c",
-			"hal_rf.h": "c"
+			"hal_rf.h": "c",
+			"cassert": "cpp",
+			"deque": "cpp",
+			"mutex": "cpp",
+			"thread": "cpp",
+			"cstddef": "cpp",
+			"cstring": "cpp",
+			"limits": "cpp",
+			"*.tcc": "cpp",
+			"ostream": "cpp"
 		},
 		"explorer.sortOrder": "type",
 		"explorer.fileNesting.enabled": true,

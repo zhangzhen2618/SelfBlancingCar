@@ -71,7 +71,7 @@ private:
 
 	void do_read();
 	void do_write(bool check_tx_state);
-	void default_parse_msg(uint8_t * buf, const size_t bufsize, size_t bytes_received);
+	void default_parse_msg(uint8_t * buf, size_t bytes_received);
 };
 
 };  // namespace SelfBlanceCar
